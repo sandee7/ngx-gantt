@@ -2,24 +2,24 @@
  * <<licensetext>>
  */
 
-import { Component, OnInit, HostBinding, ViewChild, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, HostBinding, OnInit, ViewChild } from '@angular/core';
 import {
     GanttBarClickEvent,
-    GanttViewType,
+    GanttBaselineItem,
     GanttDragEvent,
+    GanttGroup,
+    GanttItem,
     GanttLineClickEvent,
     GanttLinkDragEvent,
-    GanttItem,
     GanttPrintService,
-    NgxGanttComponent,
     GanttSelectedEvent,
-    GanttBaselineItem,
-    GanttGroup
+    GanttViewType,
+    NgxGanttComponent
 } from 'ngx-gantt';
+import { ThyNotifyService } from 'ngx-tethys/notify';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { ThyNotifyService } from 'ngx-tethys/notify';
-import { randomItems, random } from '../helper';
+import { random, randomItems } from '../helper';
 
 @Component({
     selector: 'app-gantt-example',

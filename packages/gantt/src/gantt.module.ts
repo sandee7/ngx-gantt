@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxGanttComponent } from './gantt.component';
@@ -16,9 +20,16 @@ import { IsGanttRangeItemPipe, IsGanttBarItemPipe, IsGanttCustomItemPipe } from 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { GANTT_GLOBAL_CONFIG, defaultConfig } from './gantt.config';
 import { NgxGanttBaselineComponent } from './components/baseline/baseline.component';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 @NgModule({
-    imports: [CommonModule, DragDropModule],
+    imports: [
+        CommonModule,
+        DragDropModule,
+        NgxEchartsModule.forRoot({
+            echarts: () => import('echarts')
+        })
+    ],
     exports: [
         NgxGanttComponent,
         NgxGanttTableComponent,

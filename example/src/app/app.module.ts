@@ -1,26 +1,30 @@
-import { ThyLayoutModule } from 'ngx-tethys/layout';
-import { setPrintErrorWhenIconNotFound } from 'ngx-tethys/icon';
-import { ThyNavModule } from 'ngx-tethys/nav';
-import { ThyButtonModule } from 'ngx-tethys/button';
-import { ThyCheckboxModule } from 'ngx-tethys/checkbox';
-import { ThySwitchModule } from 'ngx-tethys/switch';
-import { ThyNotifyModule } from 'ngx-tethys/notify';
-import { ThyDatePickerModule } from 'ngx-tethys/date-picker';
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { NgxGanttModule } from 'ngx-gantt';
-import { AppComponent } from './app.component';
-import { AppGanttExampleComponent } from './gantt/gantt.component';
-import { AppRoutingModule } from './app-routing.module';
+/*
+ * <<licensetext>>
+ */
+
 import { CommonModule } from '@angular/common';
-import { AppGanttAdvancedExampleComponent } from './gantt-advanced/gantt-advanced.component';
-import { AppGanttRangeExampleComponent } from './gantt-range/gantt-range.component';
-import { DocgeniTemplateModule } from '@docgeni/template';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppGanttFlatComponent } from './gantt-advanced/component/flat.component';
+import { RouterModule } from '@angular/router';
+import { DocgeniTemplateModule } from '@docgeni/template';
+import { NgxGanttModule } from 'ngx-gantt';
+import { ThyButtonModule } from 'ngx-tethys/button';
+import { ThyCheckboxModule } from 'ngx-tethys/checkbox';
+import { ThyDatePickerModule } from 'ngx-tethys/date-picker';
+import { setPrintErrorWhenIconNotFound } from 'ngx-tethys/icon';
+import { ThyLayoutModule } from 'ngx-tethys/layout';
+import { ThyNavModule } from 'ngx-tethys/nav';
+import { ThyNotifyModule } from 'ngx-tethys/notify';
+import { ThySwitchModule } from 'ngx-tethys/switch';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
 import { AppExampleComponentsComponent } from './components/components.component';
+import { AppGanttFlatComponent } from './gantt-advanced/component/flat.component';
+import { AppGanttAdvancedExampleComponent } from './gantt-advanced/gantt-advanced.component';
 import { AppGanttGroupsExampleComponent } from './gantt-groups/gantt-groups.component';
+import { AppGanttRangeExampleComponent } from './gantt-range/gantt-range.component';
+import { AppGanttExampleComponent } from './gantt/gantt.component';
 
 @NgModule({
     declarations: [

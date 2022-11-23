@@ -2,59 +2,17 @@
  * <<licensetext>>
  */
 
-import { Component, EventEmitter, HostBinding, Inject, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Inject, Input, Output, TemplateRef } from '@angular/core';
 import { EChartsOption } from 'echarts';
-import { GanttBarClickEvent, GanttGroupInternal, GanttItemInternal, GanttItemType, GanttLineClickEvent } from '../../class';
+import { GanttBarClickEvent, GanttGroupInternal, GanttItemInternal, GanttLineClickEvent } from '../../class';
 import { GanttUpper, GANTT_UPPER_TOKEN } from '../../gantt-upper';
 
 @Component({
-    selector: 'gantt-main',
-    templateUrl: './gantt-main.component.html'
+    selector: 'custom-chart',
+    templateUrl: './chart.component.html'
 })
-export class GanttMainComponent implements OnInit {
-    @Input() groups: GanttGroupInternal[];
-
-    @Input() items: GanttItemInternal[];
-
-    @Input() groupHeaderTemplate: TemplateRef<any>;
-
-    @Input() itemTemplate: TemplateRef<any>;
-
-    @Input() barTemplate: TemplateRef<any>;
-
-    @Input() rangeTemplate: TemplateRef<any>;
-
-    @Output() barClick = new EventEmitter<GanttBarClickEvent>();
-
-    @Output() lineClick = new EventEmitter<GanttLineClickEvent>();
-
-    @HostBinding('class.gantt-main-container') ganttMainClass = true;
-
-    chartOption: EChartsOption = {
-        xAxis: {
-            type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            {
-                data: [820, 932, 901, 934, 1290, 1330, 1320],
-                type: 'pie'
-            }
-        ]
-    };
-
+export class ChartComponent {
     constructor(@Inject(GANTT_UPPER_TOKEN) public ganttUpper: GanttUpper) {}
-
-    ngOnInit(): void {
-        this.items?.map((item) => {
-            console.log(item);
-            item.type = GanttItemType.custom;
-        });
-        this.groups.map((group) => group.items.map((item) => (item.type = GanttItemType.custom)));
-    }
 
     trackBy(index: number, item: GanttGroupInternal | GanttItemInternal) {
         return item.id || index;
@@ -64,6 +22,7 @@ export class GanttMainComponent implements OnInit {
         const map: Map<[Date, Date], GanttItemInternal[]> = new Map();
         let maxItemsSize = 0;
         items.map((item) => {
+            console.log(item);
             let counter = 0;
             for (let [key, value] of map) {
                 // If the two ranges are intersects each other
@@ -85,7 +44,24 @@ export class GanttMainComponent implements OnInit {
                 maxItemsSize = Math.max(maxItemsSize, 1);
             }
         });
+        console.log(maxItemsSize);
 
         return maxItemsSize;
     }
+
+    chartOption: EChartsOption = {
+        xAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                type: 'line'
+            }
+        ]
+    };
 }

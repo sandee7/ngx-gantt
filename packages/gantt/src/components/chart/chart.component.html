@@ -27,7 +27,7 @@
       <ng-container *ngFor="let item of items" [class.gantt-main-item-active]="ganttUpper.isSelected(item.id)">
         <ng-container *ngIf="item.type | isGanttCustomItem">
           <ng-template
-            [ngTemplateOutlet]="chart"
+            [ngTemplateOutlet]="itemTemplate"
             [ngTemplateOutletContext]="{
               item: item.origin,
               refs: item.refs,
@@ -59,8 +59,4 @@
       </ng-container>
     </div>
   </div>
-</ng-template>
-
-<ng-template #chart>
-  <div echarts [options]="chartOption" class="demo-chart"></div>
 </ng-template>
