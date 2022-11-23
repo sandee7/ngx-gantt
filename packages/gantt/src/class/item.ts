@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import { GanttDate } from '../utils/date';
 import { BehaviorSubject } from 'rxjs';
 import { GanttViewType } from './view-type';

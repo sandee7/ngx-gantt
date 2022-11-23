@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import {
     Input,
     TemplateRef,
@@ -178,6 +182,7 @@ export abstract class GanttUpper implements OnChanges, OnInit, OnDestroy {
         const collapsedIds = this.groups.filter((group) => group.expanded === false).map((group) => group.id);
         this.groupsMap = {};
         this.groups = [];
+        console.log(this.originGroups);
         this.originGroups.forEach((origin) => {
             const group = new GanttGroupInternal(origin);
             group.expanded = !collapsedIds.includes(group.id);

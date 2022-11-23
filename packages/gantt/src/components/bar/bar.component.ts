@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import {
     Component,
     OnInit,
@@ -85,7 +89,8 @@ export class NgxGanttBarComponent extends GanttItemUpper implements OnInit, Afte
             });
     }
 
-    onBarClick(event: Event) {
+    onBarClick(event: Event, item: any) {
+        console.log(item);
         this.barClick.emit({ event, item: this.item.origin });
     }
 
@@ -121,5 +126,9 @@ export class NgxGanttBarComponent extends GanttItemUpper implements OnInit, Afte
 
     stopPropagation(event: Event) {
         event.stopPropagation();
+    }
+
+    alma(item: any) {
+        console.log(item);
     }
 }

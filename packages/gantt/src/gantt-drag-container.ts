@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import { Injectable, EventEmitter, Inject } from '@angular/core';
 import { GanttLinkType } from './class';
 import { GanttDragEvent, GanttLinkDragEvent } from './class/event';

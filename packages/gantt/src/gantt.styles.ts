@@ -1,6 +1,10 @@
+/*
+ * <<licensetext>>
+ */
+
 export const defaultStyles = {
-    lineHeight: 44,
-    barHeight: 22
+    lineHeight: 55,
+    barHeight: 35
 };
 
 export const headerHeight = 44;

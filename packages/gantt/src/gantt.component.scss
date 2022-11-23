@@ -1,3 +1,7 @@
+/*!
+ <<licensetext>>
+ */
+
 @use 'styles/variables';
 
 .gantt {
@@ -70,7 +74,7 @@
       box-sizing: border-box;
     }
 
-    .gantt-item {
+    .gantt-item-container {
       border-bottom: 1px solid variables.$gantt-border-color;
       box-sizing: border-box;
       position: relative;

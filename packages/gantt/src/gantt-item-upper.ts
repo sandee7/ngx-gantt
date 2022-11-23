@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import { Input, ElementRef, Inject, TemplateRef, Directive, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { GanttItemInternal, GanttItemType } from './class';
 import { Subject } from 'rxjs';

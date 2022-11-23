@@ -1,3 +1,7 @@
+<!--
+  ~ <<licensetext>>
+  -->
+
 <thy-layout>
   <thy-header class="header-with-baseline">
     <ng-template #headerContent>
@@ -22,6 +26,7 @@
     <ngx-gantt
       #gantt
       [items]="items"
+      [groups]="groups"
       [baselineItems]="baselineItems"
       [viewType]="viewType"
       [async]="true"
@@ -42,7 +47,7 @@
         <ngx-gantt-column name="标题" width="180px">
           <ng-template #cell let-item="item"> {{ item.title }} </ng-template>
         </ngx-gantt-column>
-        <ngx-gantt-column name="开始时间" width="140px">
+        <!-- <ngx-gantt-column name="开始时间" width="140px">
           <ng-template #cell let-item="item">
             {{ item.start * 1000 | date: 'yyyy-MM-dd' }}
           </ng-template>
@@ -51,7 +56,7 @@
           <ng-template #cell let-item="item">
             {{ item.end * 1000 | date: 'yyyy-MM-dd' }}
           </ng-template>
-        </ngx-gantt-column>
+        </ngx-gantt-column> -->
       </ngx-gantt-table>
 
       <ng-template #bar let-item="item">

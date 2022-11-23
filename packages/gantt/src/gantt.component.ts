@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import {
     Component,
     OnInit,
