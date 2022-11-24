@@ -2,33 +2,26 @@
  * <<licensetext>>
  */
 
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NgxGanttComponent } from './gantt.component';
-import { NgxGanttTableComponent } from './table/gantt-table.component';
-import { NgxGanttTableColumnComponent } from './table/gantt-column.component';
-import { GanttCalendarComponent } from './components/calendar/calendar.component';
-import { GanttTableComponent } from './components/table/gantt-table.component';
-import { NgxGanttBarComponent } from './components/bar/bar.component';
-import { GanttMainComponent } from './components/main/gantt-main.component';
-import { GanttIconComponent } from './components/icon/icon.component';
-import { GanttDragBackdropComponent } from './components/drag-backdrop/drag-backdrop.component';
-import { NgxGanttRootComponent } from './root.component';
-import { NgxGanttRangeComponent } from './components/range/range.component';
-import { IsGanttRangeItemPipe, IsGanttBarItemPipe, IsGanttCustomItemPipe } from './gantt.pipe';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { GANTT_GLOBAL_CONFIG, defaultConfig } from './gantt.config';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { NgxGanttBarComponent } from './components/bar/bar.component';
 import { NgxGanttBaselineComponent } from './components/baseline/baseline.component';
-import { NgxEchartsModule } from 'ngx-echarts';
+import { GanttCalendarComponent } from './components/calendar/calendar.component';
+import { GanttDragBackdropComponent } from './components/drag-backdrop/drag-backdrop.component';
+import { GanttIconComponent } from './components/icon/icon.component';
+import { GanttMainComponent } from './components/main/gantt-main.component';
+import { NgxGanttRangeComponent } from './components/range/range.component';
+import { GanttTableComponent } from './components/table/gantt-table.component';
+import { NgxGanttComponent } from './gantt.component';
+import { defaultConfig, GANTT_GLOBAL_CONFIG } from './gantt.config';
+import { IsGanttBarItemPipe, IsGanttCustomItemPipe, IsGanttRangeItemPipe } from './gantt.pipe';
+import { NgxGanttRootComponent } from './root.component';
+import { NgxGanttTableColumnComponent } from './table/gantt-column.component';
+import { NgxGanttTableComponent } from './table/gantt-table.component';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        DragDropModule,
-        NgxEchartsModule.forRoot({
-            echarts: () => import('echarts')
-        })
-    ],
+    imports: [CommonModule, DragDropModule],
     exports: [
         NgxGanttComponent,
         NgxGanttTableComponent,

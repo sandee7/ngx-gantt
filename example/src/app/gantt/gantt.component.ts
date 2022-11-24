@@ -19,6 +19,7 @@ import { ThyNotifyService } from 'ngx-tethys/notify';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { random, randomItems } from '../helper';
+import { EChartsOption } from 'echarts';
 
 @Component({
     selector: 'app-gantt-example',
@@ -102,6 +103,22 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         dateFormat: {
             month: 'M月'
         }
+    };
+
+    chartOption: EChartsOption = {
+        xAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                type: 'pie'
+            }
+        ]
     };
 
     @HostBinding('class.gantt-example-component') class = true;

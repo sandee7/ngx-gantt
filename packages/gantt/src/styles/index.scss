@@ -11,3 +11,14 @@
 @use '../components/range/range.component.scss';
 @use '../components/icon/icon.component.scss';
 @use '../components/baseline/baseline.component.scss';
+
+example-root,
+app-example-components,
+.dg-layout,
+.dg-scroll-container {
+    height: 100% !important;
+}
+
+.dg-main {
+    top: 0 !important;
+}

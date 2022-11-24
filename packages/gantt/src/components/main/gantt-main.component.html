@@ -22,7 +22,7 @@
 
 <ng-template #ganttItems let-items="items">
   <div class="gantt-item-container">
-    <div [style.height.px]="ganttUpper.styles.lineHeight * setItemMap(items)">
+    <div [style.height.px]="ganttUpper.styles.lineHeight * getCurrentMaxItemSize()">
       <ng-container *ngFor="let item of items" [class.gantt-main-item-active]="ganttUpper.isSelected(item.id)">
         <ng-container *ngIf="item.type | isGanttCustomItem">
           <ng-template

@@ -8,6 +8,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { DocgeniTemplateModule } from '@docgeni/template';
+import { NgxEchartsModule } from 'ngx-echarts';
 import { NgxGanttModule } from 'ngx-gantt';
 import { ThyButtonModule } from 'ngx-tethys/button';
 import { ThyCheckboxModule } from 'ngx-tethys/checkbox';
@@ -37,6 +38,9 @@ import { AppGanttExampleComponent } from './gantt/gantt.component';
         AppGanttFlatComponent
     ],
     imports: [
+        NgxEchartsModule.forRoot({
+            echarts: () => import('echarts')
+        }),
         BrowserModule,
         BrowserAnimationsModule,
         CommonModule,
