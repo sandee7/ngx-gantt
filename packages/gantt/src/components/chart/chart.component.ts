@@ -2,9 +2,9 @@
  * <<licensetext>>
  */
 
-import { Component, EventEmitter, HostBinding, Inject, Input, Output, TemplateRef } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { EChartsOption } from 'echarts';
-import { GanttBarClickEvent, GanttGroupInternal, GanttItemInternal, GanttLineClickEvent } from '../../class';
+import { GanttGroupInternal, GanttItemInternal } from '../../class';
 import { GanttUpper, GANTT_UPPER_TOKEN } from '../../gantt-upper';
 
 @Component({

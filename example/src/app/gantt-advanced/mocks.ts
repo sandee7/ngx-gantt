@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 export const mockGroups = [
     {
         id: '00001',
@@ -28,7 +32,7 @@ export const mockItems = [
         title: 'VERSION 0101',
         start: 1601318400,
         group_id: '00001',
-        color: '#FF0000',
+        color: '#FF0000'
     },
     {
         id: 'item-0102',
@@ -48,8 +52,7 @@ export const mockItems = [
     {
         id: 'item-0104',
         title: 'VERSION 0104',
-        group_id: '00001',
-        links: ['item-0301']
+        group_id: '00001'
     },
     {
         id: 'item-0201',
@@ -62,7 +65,6 @@ export const mockItems = [
         start: 1581035675,
         end: 1590230000,
         group_id: '00002',
-        links: ['item-0203'],
         color: 'rgb(52, 143, 228, 0.5)',
         barStyle: {
             border: '1px solid rgb(52, 143, 228)'
@@ -73,16 +75,14 @@ export const mockItems = [
         title: 'VERSION 0203',
         start: 1593548400,
         end: 1602428400,
-        group_id: '00002',
-        links: ['item-0204']
+        group_id: '00002'
     },
     {
         id: 'item-0204',
         title: 'VERSION 0204',
         start: 1591035675,
         end: 1592418400,
-        group_id: '00002',
-        links: ['item-0301', 'item-0402']
+        group_id: '00002'
     },
 
     {

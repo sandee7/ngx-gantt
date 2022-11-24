@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import { isPlatformServer } from '@angular/common';
 import { Injectable, ElementRef, OnDestroy, Inject, PLATFORM_ID, NgZone } from '@angular/core';
 import { fromEvent, Subject, merge, EMPTY, Observable } from 'rxjs';
@@ -31,8 +35,6 @@ export class GanttDomService implements OnDestroy {
     public mainContainer: Element;
 
     public calendarOverlay: Element;
-
-    public linksOverlay: Element;
 
     private unsubscribe$ = new Subject<void>();
 

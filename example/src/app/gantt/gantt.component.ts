@@ -10,7 +10,6 @@ import {
     GanttGroup,
     GanttItem,
     GanttLineClickEvent,
-    GanttLinkDragEvent,
     GanttPrintService,
     GanttSelectedEvent,
     GanttViewType,
@@ -142,11 +141,6 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             'Event: selectedChange',
             `当前选中的 item 的 id 为 ${(event.selectedValue as GanttItem[]).map((item) => item.id).join('、')}`
         );
-    }
-
-    linkDragEnded(event: GanttLinkDragEvent) {
-        this.items = [...this.items];
-        this.thyNotify.info('Event: linkDragEnded', `创建了关联关系`);
     }
 
     print(name: string) {

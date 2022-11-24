@@ -1,19 +1,21 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
-import { mockItems } from './mocks';
+/*
+ * <<licensetext>>
+ */
+
+import { Component, HostBinding, OnInit } from '@angular/core';
 import {
     GanttBarClickEvent,
-    GanttViewType,
-    GanttDragEvent,
-    GanttLoadOnScrollEvent,
-    GanttLineClickEvent,
-    GanttLinkDragEvent,
-    GanttItem,
-    GanttViewOptions,
     GanttDate,
-    GanttPrintService
+    GanttDragEvent,
+    GanttItem,
+    GanttLoadOnScrollEvent,
+    GanttPrintService,
+    GanttViewOptions,
+    GanttViewType
 } from 'ngx-gantt';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { mockItems } from './mocks';
 @Component({
     selector: 'app-gantt-range-example',
     templateUrl: './gantt-range.component.html',

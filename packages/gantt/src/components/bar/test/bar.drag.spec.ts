@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import { CommonModule } from '@angular/common';
 import { ApplicationRef, Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -24,15 +28,13 @@ const mockBarItems = [
         id: 'item-0203',
         title: 'VERSION 0203',
         start: new GanttDate('2020-04-23 20:07:55').getUnixTime(),
-        end: new GanttDate('2020-06-23 00:00:00').getUnixTime(),
-        links: ['item-0204']
+        end: new GanttDate('2020-06-23 00:00:00').getUnixTime()
     },
     {
         id: 'item-0204',
         title: 'VERSION 0204',
         start: new GanttDate('2020-06-02 02:21:15').getUnixTime(),
-        end: new GanttDate('2020-06-18 02:26:40').getUnixTime(),
-        links: ['item-0101']
+        end: new GanttDate('2020-06-18 02:26:40').getUnixTime()
     }
 ];
 
@@ -43,11 +45,8 @@ const mockBarItems = [
         [items]="items"
         [viewType]="viewType"
         [draggable]="draggable"
-        [linkable]="linkable"
         (dragEnded)="dragEnded($event)"
         (dragStarted)="dragStarted($event)"
-        (linkDragEnded)="linkDragEnded($event)"
-        (linkDragStarted)="linkDragStarted($event)"
     >
         <ngx-gantt-table>
             <ngx-gantt-column name="标题" width="200px">

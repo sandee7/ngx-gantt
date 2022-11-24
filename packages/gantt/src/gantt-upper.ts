@@ -30,8 +30,7 @@ import {
     GanttDragEvent,
     GanttGroupInternal,
     GanttItemInternal,
-    GanttBarClickEvent,
-    GanttLinkDragEvent
+    GanttBarClickEvent
 } from './class';
 import { GanttView, GanttViewOptions } from './views/view';
 import { createViewFactory } from './views/factory';
@@ -40,7 +39,6 @@ import { GanttStyles, defaultStyles } from './gantt.styles';
 import { uniqBy, flatten, recursiveItems, getFlatItems, Dictionary, keyBy } from './utils/helpers';
 import { GanttDragContainer } from './gantt-drag-container';
 import { GANTT_GLOBAL_CONFIG, GanttGlobalConfig, defaultConfig } from './gantt.config';
-import { GanttLinkOptions } from './class/link';
 import { SelectionModel } from '@angular/cdk/collections';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { GanttBaselineItem, GanttBaselineItemInternal } from './class/baseline';
@@ -69,14 +67,6 @@ export abstract class GanttUpper implements OnChanges, OnInit, OnDestroy {
     @Input() styles: GanttStyles;
 
     @Input() viewOptions: GanttViewOptions = {};
-
-    @Input() set linkOptions(options: GanttLinkOptions) {
-        this._linkOptions = options;
-    }
-
-    get linkOptions() {
-        return Object.assign({}, defaultConfig.linkOptions, this.config.linkOptions, this._linkOptions);
-    }
 
     @Input() disabledLoadOnScroll: boolean;
 
@@ -128,8 +118,6 @@ export abstract class GanttUpper implements OnChanges, OnInit, OnDestroy {
 
     public linkable: boolean;
 
-    public linkDragEnded = new EventEmitter<GanttLinkDragEvent>();
-
     public view: GanttView;
 
     public items: GanttItemInternal[] = [];
@@ -161,8 +149,6 @@ export abstract class GanttUpper implements OnChanges, OnInit, OnDestroy {
     private _selectable = false;
 
     private _multiple = false;
-
-    private _linkOptions: GanttLinkOptions;
 
     @HostBinding('class.gantt') ganttClass = true;
 

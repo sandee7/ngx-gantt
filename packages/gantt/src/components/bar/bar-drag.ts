@@ -1,14 +1,17 @@
-import { Injectable, ElementRef, OnDestroy, SkipSelf } from '@angular/core';
-import { DragRef, DragDrop } from '@angular/cdk/drag-drop';
-import { GanttDomService } from '../../gantt-dom.service';
-import { GanttDragContainer, InBarPosition } from '../../gantt-drag-container';
-import { GanttItemInternal } from '../../class/item';
-import { GanttDate, differenceInCalendarDays } from '../../utils/date';
+/*
+ * <<licensetext>>
+ */
+
+import { DragDrop, DragRef } from '@angular/cdk/drag-drop';
+import { ElementRef, Injectable, OnDestroy, SkipSelf } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { GanttItemInternal } from '../../class/item';
+import { GanttDomService } from '../../gantt-dom.service';
+import { GanttDragContainer } from '../../gantt-drag-container';
 import { GanttUpper } from '../../gantt-upper';
-import { GanttLinkType } from '../../class/link';
 import { NgxGanttRootComponent } from '../../root.component';
+import { differenceInCalendarDays, GanttDate } from '../../utils/date';
 import { passiveListenerOptions } from '../../utils/passive-listeners';
 
 const dragMinWidth = 10;
@@ -54,37 +57,10 @@ export class GanttBarDrag implements OnDestroy {
     ) {}
 
     private createMouseEvents() {
-        const dropClass =
-            this.ganttUpper.config.linkOptions?.dependencyTypes?.length === 1 &&
-            this.ganttUpper.config.linkOptions?.dependencyTypes[0] === GanttLinkType.fs
-                ? singleDropActiveClass
-                : dropActiveClass;
-
         fromEvent(this.barElement, 'mouseenter', passiveListenerOptions)
             .pipe(takeUntil(this.destroy$))
             .subscribe(() => {
-                if (this.dragContainer.linkDraggingId && this.dragContainer.linkDraggingId !== this.item.id) {
-                    if (this.item.linkable) {
-                        this.barElement.classList.add(dropClass);
-                        this.dragContainer.emitLinkDragEntered({
-                            item: this.item,
-                            element: this.barElement
-                        });
-                    }
-                } else {
-                    this.barElement.classList.add(activeClass);
-                }
-            });
-
-        fromEvent(this.barElement, 'mouseleave', passiveListenerOptions)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(() => {
-                if (!this.dragContainer.linkDraggingId) {
-                    this.barElement.classList.remove(activeClass);
-                } else {
-                    this.dragContainer.emitLinkDragLeaved();
-                }
-                this.barElement.classList.remove(dropClass);
+                this.barElement.classList.add(activeClass);
             });
     }
 
@@ -189,65 +165,6 @@ export class GanttBarDrag implements OnDestroy {
         return dragRefs;
     }
 
-    private createLinkHandleDrags() {
-        const dragRefs = [];
-        const handles = this.barElement.querySelectorAll<HTMLElement>('.link-handles .handle');
-        handles.forEach((handle, index) => {
-            const isBegin = index === 0;
-            const dragRef = this.dragDrop.createDrag(handle);
-            dragRef.withBoundaryElement(this.dom.root as HTMLElement);
-            dragRef.beforeStarted.subscribe(() => {
-                handle.style.pointerEvents = 'none';
-                if (this.barDragRef) {
-                    this.barDragRef.disabled = true;
-                }
-                this.createLinkDraggingLine();
-                this.dragContainer.emitLinkDragStarted({
-                    element: this.barElement,
-                    item: this.item,
-                    pos: isBegin ? InBarPosition.start : InBarPosition.finish
-                });
-            });
-
-            dragRef.moved.subscribe(() => {
-                const positions = this.calcLinkLinePositions(handle, isBegin);
-                this.linkDraggingLine.setAttribute('x1', positions.x1.toString());
-                this.linkDraggingLine.setAttribute('y1', positions.y1.toString());
-                this.linkDraggingLine.setAttribute('x2', positions.x2.toString());
-                this.linkDraggingLine.setAttribute('y2', positions.y2.toString());
-            });
-
-            dragRef.ended.subscribe((event) => {
-                handle.style.pointerEvents = '';
-                if (this.barDragRef) {
-                    this.barDragRef.disabled = false;
-                }
-                // 计算line拖动的落点位于目标Bar的值，如果值大于Bar宽度的一半，说明是拖动到Begin位置，否则则为拖动到End位置
-                if (this.dragContainer.linkDragPath.to) {
-                    const placePointX =
-                        event.source.getRootElement().getBoundingClientRect().x -
-                        this.dragContainer.linkDragPath.to.element.getBoundingClientRect().x;
-
-                    this.dragContainer.emitLinkDragEnded({
-                        ...this.dragContainer.linkDragPath.to,
-                        pos:
-                            placePointX < this.dragContainer.linkDragPath.to.item.refs.width / 2
-                                ? InBarPosition.start
-                                : InBarPosition.finish
-                    });
-                } else {
-                    this.dragContainer.emitLinkDragEnded();
-                }
-                event.source.reset();
-                this.barElement.classList.remove(activeClass);
-                this.destroyLinkDraggingLine();
-            });
-
-            dragRefs.push(dragRef);
-        });
-        return dragRefs;
-    }
-
     private openDragBackdrop(dragElement: HTMLElement, start: GanttDate, end: GanttDate) {
         const dragBackdropElement = this.root.backdrop.nativeElement;
         const dragMaskElement = dragBackdropElement.querySelector('.gantt-drag-mask') as HTMLElement;
@@ -282,42 +199,11 @@ export class GanttBarDrag implements OnDestroy {
         this.barElement.classList.remove('gantt-bar-draggable-drag');
     }
 
-    private calcLinkLinePositions(target: HTMLElement, isBefore: boolean) {
-        const rootRect = this.dom.root.getBoundingClientRect();
-        const targetRect = target.getBoundingClientRect();
-        const layerRect = target.parentElement.parentElement.getBoundingClientRect();
-        return {
-            x1: layerRect.left + (isBefore ? 0 : layerRect.width) - rootRect.left,
-            y1: layerRect.top + layerRect.height / 2 - rootRect.top,
-            x2: targetRect.left - rootRect.left + targetRect.width / 2,
-            y2: targetRect.top - rootRect.top + targetRect.height / 2
-        };
-    }
-
-    private createLinkDraggingLine() {
-        if (!this.linkDraggingLine) {
-            const svgElement = createSvgElement('svg', 'gantt-link-drag-container');
-            const linElement = createSvgElement('line', 'link-dragging-line');
-            linElement.style.pointerEvents = 'none';
-            svgElement.appendChild(linElement);
-            this.dom.root.appendChild(svgElement);
-            this.linkDraggingLine = linElement;
-        }
-    }
-
-    private destroyLinkDraggingLine() {
-        if (this.linkDraggingLine) {
-            this.linkDraggingLine.parentElement.remove();
-            this.linkDraggingLine = null;
-        }
-    }
-
     createDrags(elementRef: ElementRef, item: GanttItemInternal, ganttUpper: GanttUpper) {
         this.item = item;
         this.barElement = elementRef.nativeElement;
         this.ganttUpper = ganttUpper;
-        // if (!item.draggable || (this.dragDisabled && this.linkDragDisabled)) {
-        if (this.dragDisabled && this.linkDragDisabled) {
+        if (this.dragDisabled) {
             return;
         } else {
             this.createMouseEvents();
@@ -325,10 +211,6 @@ export class GanttBarDrag implements OnDestroy {
                 const dragRef = this.createBarDrag();
                 const dragHandlesRefs = this.createBarHandleDrags();
                 this.dragRefs.push(dragRef, ...dragHandlesRefs);
-            }
-            if (!this.linkDragDisabled) {
-                const linkDragRefs = this.createLinkHandleDrags();
-                this.dragRefs.push(...linkDragRefs);
             }
         }
     }

@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import { Injectable, ElementRef } from '@angular/core';
 
 @Injectable()
@@ -76,7 +80,6 @@ export class GanttPrintService {
                 const cloneGanttDom = cloneDocument.querySelector(`.${ganttClass.replace(/\s+/g, '.')}`) as HTMLElement;
                 const cloneGanttContainerDom = cloneDocument.querySelector('.gantt-container') as HTMLElement;
                 const cloneCalendarOverlay = cloneDocument.querySelector('.gantt-calendar-overlay-main') as HTMLElement;
-                const cloneLinksOverlay = cloneDocument.querySelector('.gantt-links-overlay-main') as HTMLElement;
 
                 // change targetDom width
                 cloneGanttDom.style.width = `${printWidth}px`;
@@ -85,11 +88,6 @@ export class GanttPrintService {
                 cloneGanttContainerDom.style.backgroundColor = '#fff';
                 cloneCalendarOverlay.setAttribute('height', `${printHeight}`);
                 cloneCalendarOverlay.setAttribute('style', `background: transparent`);
-
-                if (cloneLinksOverlay) {
-                    cloneLinksOverlay.setAttribute('height', `${printHeight}`);
-                    cloneLinksOverlay.setAttribute('style', `height: ${printHeight}px`);
-                }
 
                 // setInlineStyles for svg
                 this.setInlineStyles(cloneGanttDom);

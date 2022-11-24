@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import { GanttDate } from './../../utils/date';
 
 export function getMockItems() {
@@ -32,9 +36,7 @@ export function getMockItems() {
         },
         {
             id: 'item-0104',
-            title: 'VERSION 0104',
-
-            links: ['item-0301']
+            title: 'VERSION 0104'
         },
         {
             id: 'item-0201',
@@ -45,7 +47,6 @@ export function getMockItems() {
             title: 'VERSION 0202',
             start: new GanttDate('2020-06-02 02:21:15').getUnixTime(),
             end: new GanttDate('2020-06-25 01:06:40').getUnixTime(),
-            links: ['item-0203'],
             color: 'rgb(52, 143, 228, 0.5)',
             barStyle: {
                 border: '1px solid rgb(52, 143, 228)'
@@ -55,15 +56,13 @@ export function getMockItems() {
             id: 'item-0203',
             title: 'VERSION 0203',
             start: new GanttDate('2020-05-23 20:07:55').getUnixTime(),
-            end: new GanttDate('2020-06-10 00:00:00').getUnixTime(),
-            links: ['item-0204']
+            end: new GanttDate('2020-06-10 00:00:00').getUnixTime()
         },
         {
             id: 'item-0204',
             title: 'VERSION 0204',
             start: new GanttDate('2020-06-02 02:21:15').getUnixTime(),
-            end: new GanttDate('2020-06-18 02:26:40').getUnixTime(),
-            links: ['item-0301', 'item-0402']
+            end: new GanttDate('2020-06-18 02:26:40').getUnixTime()
         },
 
         {
@@ -189,8 +188,7 @@ export function getMockGroupItems() {
         {
             id: 'item-0104',
             title: 'VERSION 0104',
-            group_id: '00001',
-            links: ['item-0301']
+            group_id: '00001'
         },
         {
             id: 'item-0201',
@@ -203,7 +201,6 @@ export function getMockGroupItems() {
             start: new GanttDate('2020-06-02 02:21:15').getUnixTime(),
             end: new GanttDate('2020-06-25 01:06:40').getUnixTime(),
             group_id: '00002',
-            links: ['item-0203'],
             color: 'rgb(52, 143, 228, 0.5)',
             barStyle: {
                 border: '1px solid rgb(52, 143, 228)'
@@ -214,16 +211,14 @@ export function getMockGroupItems() {
             title: 'VERSION 0203',
             start: new GanttDate('2020-05-23 20:07:55').getUnixTime(),
             end: new GanttDate('2020-06-10 00:00:00').getUnixTime(),
-            group_id: '00002',
-            links: ['item-0204']
+            group_id: '00002'
         },
         {
             id: 'item-0204',
             title: 'VERSION 0204',
             start: new GanttDate('2020-06-02 02:21:15').getUnixTime(),
             end: new GanttDate('2020-06-18 02:26:40').getUnixTime(),
-            group_id: '00002',
-            links: ['item-0301', 'item-0402']
+            group_id: '00002'
         },
 
         {

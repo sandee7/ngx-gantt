@@ -32,7 +32,6 @@
       [async]="true"
       [childrenResolve]="childrenResolve"
       [draggable]="true"
-      [linkable]="true"
       [selectable]="true"
       [multiple]="true"
       [viewOptions]="viewOptions"
@@ -41,7 +40,6 @@
       (dragMoved)="dragMoved($event)"
       (dragEnded)="dragEnded($event)"
       (selectedChange)="selectedChange($event)"
-      (linkDragEnded)="linkDragEnded($event)"
     >
       <ngx-gantt-table>
         <ngx-gantt-column name="标题" width="180px">

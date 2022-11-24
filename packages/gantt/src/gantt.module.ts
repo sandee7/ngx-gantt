@@ -13,7 +13,6 @@ import { NgxGanttBarComponent } from './components/bar/bar.component';
 import { GanttMainComponent } from './components/main/gantt-main.component';
 import { GanttIconComponent } from './components/icon/icon.component';
 import { GanttDragBackdropComponent } from './components/drag-backdrop/drag-backdrop.component';
-import { GanttLinksComponent } from './components/links/links.component';
 import { NgxGanttRootComponent } from './root.component';
 import { NgxGanttRangeComponent } from './components/range/range.component';
 import { IsGanttRangeItemPipe, IsGanttBarItemPipe, IsGanttCustomItemPipe } from './gantt.pipe';
@@ -46,7 +45,6 @@ import { NgxEchartsModule } from 'ngx-echarts';
         GanttTableComponent,
         GanttMainComponent,
         GanttCalendarComponent,
-        GanttLinksComponent,
         NgxGanttBarComponent,
         GanttIconComponent,
         GanttDragBackdropComponent,

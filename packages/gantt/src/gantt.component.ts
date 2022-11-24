@@ -24,7 +24,7 @@ import {
 import { startWith, takeUntil, take, finalize } from 'rxjs/operators';
 import { Subject, Observable, from } from 'rxjs';
 import { GanttUpper, GANTT_UPPER_TOKEN } from './gantt-upper';
-import { GanttLinkDragEvent, GanttLineClickEvent, GanttItemInternal, GanttItem, GanttSelectedEvent } from './class';
+import { GanttLineClickEvent, GanttItemInternal, GanttItem, GanttSelectedEvent } from './class';
 import { NgxGanttTableColumnComponent } from './table/gantt-column.component';
 import { sideWidth } from './gantt.styles';
 import { coerceCssPixelValue } from '@angular/cdk/coercion';
@@ -58,10 +58,6 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
 
     @Input() override linkable: boolean;
 
-    @Output() linkDragStarted = new EventEmitter<GanttLinkDragEvent>();
-
-    @Output() override linkDragEnded = new EventEmitter<GanttLinkDragEvent>();
-
     @Output() lineClick = new EventEmitter<GanttLineClickEvent>();
 
     @Output() selectedChange = new EventEmitter<GanttSelectedEvent>();
@@ -92,18 +88,6 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
         // Note: the zone may be nooped through `BootstrapOptions` when bootstrapping the root module. This means
         // the `onStable` will never emit any value.
         const onStable$ = this.ngZone.isStable ? from(Promise.resolve()) : this.ngZone.onStable.pipe(take(1));
-        // Normally this isn't in the zone, but it can cause performance regressions for apps
-        // using `zone-patch-rxjs` because it'll trigger a change detection when it unsubscribes.
-        this.ngZone.runOutsideAngular(() => {
-            onStable$.pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
-                this.dragContainer.linkDragStarted.pipe(takeUntil(this.ngUnsubscribe$)).subscribe((event: GanttLinkDragEvent) => {
-                    this.linkDragStarted.emit(event);
-                });
-                this.dragContainer.linkDragEnded.pipe(takeUntil(this.ngUnsubscribe$)).subscribe((event: GanttLinkDragEvent) => {
-                    this.linkDragEnded.emit(event);
-                });
-            });
-        });
     }
 
     ngAfterViewInit() {

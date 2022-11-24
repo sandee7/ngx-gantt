@@ -5,7 +5,6 @@
 import { GanttDate } from '../utils/date';
 import { BehaviorSubject } from 'rxjs';
 import { GanttViewType } from './view-type';
-import { GanttLink, GanttLinkType } from './link';
 
 export interface GanttItemRefs {
     width: number;
@@ -25,7 +24,6 @@ export interface GanttItem<T = unknown> {
     start?: number;
     end?: number;
     group_id?: string;
-    links?: (GanttLink | string)[];
     draggable?: boolean;
     linkable?: boolean;
     expandable?: boolean;
@@ -43,7 +41,6 @@ export class GanttItemInternal {
     title: string;
     start: GanttDate;
     end: GanttDate;
-    links: GanttLink[];
     color?: string;
     barStyle?: Partial<CSSStyleDeclaration>;
     draggable?: boolean;
@@ -66,16 +63,6 @@ export class GanttItemInternal {
     constructor(item: GanttItem, options?: { viewType: GanttViewType }) {
         this.origin = item;
         this.id = this.origin.id;
-        this.links = (this.origin.links || []).map((link) => {
-            if (typeof link === 'string') {
-                return {
-                    type: GanttLinkType.fs,
-                    link
-                };
-            } else {
-                return link;
-            }
-        });
         this.color = this.origin.color;
         this.barStyle = this.origin.barStyle;
         this.linkable = this.origin.linkable === undefined ? true : this.origin.linkable;
@@ -134,11 +121,5 @@ export class GanttItemInternal {
     setExpand(expanded: boolean) {
         this.expanded = expanded;
         this.origin.expanded = expanded;
-    }
-
-    addLink(link: GanttLink) {
-        console.log(link);
-        this.links = [...this.links, link];
-        this.origin.links = this.links;
     }
 }

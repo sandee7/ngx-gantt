@@ -1,4 +1,7 @@
-import { GanttLinkType, GanttLinkOptions, GanttLinkLineType } from './class/link';
+/*
+ * <<licensetext>>
+ */
+
 import { InjectionToken } from '@angular/core';
 
 export interface GanttDateFormat {
@@ -12,7 +15,6 @@ export interface GanttDateFormat {
 
 export interface GanttGlobalConfig {
     dateFormat?: GanttDateFormat;
-    linkOptions?: GanttLinkOptions;
 }
 
 export const defaultConfig = {
@@ -23,11 +25,6 @@ export const defaultConfig = {
         year: 'yyyy年',
         yearMonth: 'yyyy年MM月',
         yearQuarter: 'yyyy年QQQ'
-    },
-    linkOptions: {
-        dependencyTypes: [GanttLinkType.fs],
-        showArrow: false,
-        lineType: GanttLinkLineType.curve
     }
 };
 

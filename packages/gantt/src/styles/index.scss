@@ -1,3 +1,7 @@
+/*!
+ <<licensetext>>
+ */
+
 @use './variables.scss';
 @use '../gantt.component.scss';
 @use '../components/table/gantt-table.component.scss';
@@ -6,5 +10,4 @@
 @use '../components/bar/bar.component.scss';
 @use '../components/range/range.component.scss';
 @use '../components/icon/icon.component.scss';
-@use '../components/links/links.component.scss';
 @use '../components/baseline/baseline.component.scss';

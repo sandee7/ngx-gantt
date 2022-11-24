@@ -51,9 +51,9 @@ export class GanttMainComponent implements OnInit {
     ngOnInit(): void {
         this.items?.map((item) => {
             console.log(item);
-            item.type = GanttItemType.custom;
+            // item.type = GanttItemType.custom;
         });
-        this.groups.map((group) => group.items.map((item) => (item.type = GanttItemType.custom)));
+        // this.groups.map((group) => group.items.map((item) => (item.type = GanttItemType.custom)));
     }
 
     trackBy(index: number, item: GanttGroupInternal | GanttItemInternal) {
