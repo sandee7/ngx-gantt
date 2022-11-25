@@ -1,25 +1,31 @@
+/*
+ * <<licensetext>>
+ */
+
 import {
     Component,
-    HostBinding,
-    TemplateRef,
-    QueryList,
-    Input,
-    ViewChild,
     ElementRef,
-    OnChanges,
-    SimpleChanges,
+    EventEmitter,
+    HostBinding,
     Inject,
+    Input,
+    OnChanges,
+    OnInit,
     Output,
-    EventEmitter
+    QueryList,
+    SimpleChanges,
+    TemplateRef,
+    ViewChild
 } from '@angular/core';
-import { GanttItemInternal, GanttGroupInternal, GanttSelectedEvent } from '../../class';
+import { GanttGroupInternal, GanttItemInternal, GanttSelectedEvent } from '../../class';
 import { NgxGanttTableColumnComponent } from '../../table/gantt-column.component';
 // import { defaultColumnWidth, minColumnWidth } from '../../gantt.component';
-import { CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 import { coerceCssPixelValue } from '@angular/cdk/coercion';
+import { CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 import { GanttAbstractComponent, GANTT_ABSTRACT_TOKEN } from '../../gantt-abstract';
 import { GanttUpper, GANTT_UPPER_TOKEN } from '../../gantt-upper';
 import { setStyleWithVendorPrefix } from '../../utils/set-style-with-vendor-prefix';
+import { GanttService } from 'example/src/app/services/gantt.service';
 
 export const defaultColumnWidth = 100;
 export const minColumnWidth = 80;
@@ -34,7 +40,7 @@ interface DragFixedConfig {
     selector: 'gantt-table',
     templateUrl: './gantt-table.component.html'
 })
-export class GanttTableComponent implements OnChanges {
+export class GanttTableComponent implements OnInit, OnChanges {
     public columnList: QueryList<NgxGanttTableColumnComponent>;
 
     public dragStartLeft: number;
@@ -69,17 +75,40 @@ export class GanttTableComponent implements OnChanges {
 
     @HostBinding('class.gantt-table-empty') ganttTableEmptyClass = false;
 
+    firstChange = true;
+
     constructor(
         @Inject(GANTT_ABSTRACT_TOKEN) public gantt: GanttAbstractComponent,
         @Inject(GANTT_UPPER_TOKEN) public ganttUpper: GanttUpper,
-        private elementRef: ElementRef
+        private elementRef: ElementRef,
+        private ganttService: GanttService
     ) {}
 
+    ngOnInit(): void {
+        this.ganttService.getMaxItemSizeWrapper(this.items, this.groups);
+    }
+
     ngOnChanges(changes: SimpleChanges) {
+        console.log(this.items);
+        console.log(this.groups);
         if (!changes.groups.currentValue?.length && !changes.items.currentValue?.length) {
             this.ganttTableEmptyClass = true;
         } else {
             this.ganttTableEmptyClass = false;
+        }
+
+        if (!this.firstChange) {
+            this.ganttService.getMaxItemSizeWrapper(this.items, this.groups);
+        }
+        if (this.firstChange) {
+            this.firstChange = false;
+        }
+    }
+
+    getCurrentMaxItemSize(currentGroup: GanttGroupInternal) {
+        if (!this.firstChange) {
+            const index = this.groups.findIndex((group) => group.id === currentGroup.id);
+            return this.ganttService.getCurrentMaxItemSize(this.items, index);
         }
     }
 

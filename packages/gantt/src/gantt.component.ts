@@ -2,37 +2,37 @@
  * <<licensetext>>
  */
 
+import { coerceCssPixelValue } from '@angular/cdk/coercion';
 import {
-    Component,
-    OnInit,
-    ElementRef,
-    ChangeDetectionStrategy,
-    Input,
-    EventEmitter,
-    Output,
-    ChangeDetectorRef,
-    NgZone,
-    ContentChildren,
-    QueryList,
     AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
     ContentChild,
-    TemplateRef,
+    ContentChildren,
+    ElementRef,
+    EventEmitter,
     forwardRef,
     Inject,
+    Input,
+    NgZone,
+    OnInit,
+    Output,
+    QueryList,
+    TemplateRef,
     ViewChild
 } from '@angular/core';
-import { startWith, takeUntil, take, finalize } from 'rxjs/operators';
-import { Subject, Observable, from } from 'rxjs';
-import { GanttUpper, GANTT_UPPER_TOKEN } from './gantt-upper';
-import { GanttLineClickEvent, GanttItemInternal, GanttItem, GanttSelectedEvent } from './class';
-import { NgxGanttTableColumnComponent } from './table/gantt-column.component';
-import { sideWidth } from './gantt.styles';
-import { coerceCssPixelValue } from '@angular/cdk/coercion';
-import { NgxGanttTableComponent } from './table/gantt-table.component';
-import { GANTT_ABSTRACT_TOKEN } from './gantt-abstract';
+import { from, Observable, Subject } from 'rxjs';
+import { finalize, startWith, take, takeUntil } from 'rxjs/operators';
+import { GanttItem, GanttItemInternal, GanttLineClickEvent, GanttSelectedEvent } from './class';
 import { defaultColumnWidth } from './components/table/gantt-table.component';
+import { GANTT_ABSTRACT_TOKEN } from './gantt-abstract';
+import { GanttUpper, GANTT_UPPER_TOKEN } from './gantt-upper';
 import { GanttGlobalConfig, GANTT_GLOBAL_CONFIG } from './gantt.config';
+import { sideWidth } from './gantt.styles';
 import { NgxGanttRootComponent } from './root.component';
+import { NgxGanttTableColumnComponent } from './table/gantt-column.component';
+import { NgxGanttTableComponent } from './table/gantt-table.component';
 import { GanttDate } from './utils/date';
 @Component({
     selector: 'ngx-gantt',

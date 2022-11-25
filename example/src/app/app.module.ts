@@ -26,6 +26,7 @@ import { AppGanttAdvancedExampleComponent } from './gantt-advanced/gantt-advance
 import { AppGanttGroupsExampleComponent } from './gantt-groups/gantt-groups.component';
 import { AppGanttRangeExampleComponent } from './gantt-range/gantt-range.component';
 import { AppGanttExampleComponent } from './gantt/gantt.component';
+import { GanttService } from './services/gantt.service';
 
 @NgModule({
     declarations: [
@@ -56,7 +57,7 @@ import { AppGanttExampleComponent } from './gantt/gantt.component';
         ThySwitchModule,
         ThyDatePickerModule
     ],
-    providers: [],
+    providers: [GanttService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

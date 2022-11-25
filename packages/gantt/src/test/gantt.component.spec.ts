@@ -238,8 +238,8 @@ function assertItems<T extends TestGanttComponentBase>(fixture: ComponentFixture
     const items = fixture.debugElement.queryAll(By.directive(NgxGanttBarComponent));
     expect(items.length).toEqual(expectedItems.length);
     items.forEach((item: DebugElement, index: number) => {
-        expect(ganttComponent.items[index].id).toEqual(expectedItems[index].id);
-        assertItem(item, ganttComponent.items[index]);
+        expect(ganttComponent._items[index].id).toEqual(expectedItems[index].id);
+        assertItem(item, ganttComponent._items[index]);
     });
 }
 
@@ -479,13 +479,13 @@ describe('ngx-gantt', () => {
             ganttIcon.nativeElement.click();
             fixture.detectChanges();
             const afterExpandItems = fixture.debugElement.queryAll(By.css('.gantt-table-item'));
-            expect(ganttComponent.items[0].expanded).toBe(true);
-            expect(afterExpandItems.length).toEqual(mockItems.length + ganttComponent.items[0].children.length);
+            expect(ganttComponent._items[0].expanded).toBe(true);
+            expect(afterExpandItems.length).toEqual(mockItems.length + ganttComponent._items[0].children.length);
 
             ganttIcon.nativeElement.click();
             fixture.detectChanges();
             const afterCollapseItems = fixture.debugElement.queryAll(By.css('.gantt-table-item'));
-            expect(ganttComponent.items[0].expanded).toBe(false);
+            expect(ganttComponent._items[0].expanded).toBe(false);
             expect(afterCollapseItems.length).toEqual(mockItems.length);
         });
 
@@ -497,14 +497,14 @@ describe('ngx-gantt', () => {
             tick(2000);
             fixture.detectChanges();
             const afterExpandItems = fixture.debugElement.queryAll(By.css('.gantt-table-item'));
-            expect(ganttComponent.items[1].expanded).toBe(true);
+            expect(ganttComponent._items[1].expanded).toBe(true);
             expect(afterExpandItems.length).toEqual(mockItems.length + 1);
 
             ganttIcon.nativeElement.click();
             tick(2000);
             fixture.detectChanges();
             const afterCollapseItems = fixture.debugElement.queryAll(By.css('.gantt-table-item'));
-            expect(ganttComponent.items[1].expanded).toBe(false);
+            expect(ganttComponent._items[1].expanded).toBe(false);
             expect(afterCollapseItems.length).toEqual(mockItems.length);
         }));
     });

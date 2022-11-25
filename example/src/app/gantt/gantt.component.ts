@@ -3,6 +3,7 @@
  */
 
 import { AfterViewInit, Component, HostBinding, OnInit, ViewChild } from '@angular/core';
+import { EChartsOption } from 'echarts';
 import {
     GanttBarClickEvent,
     GanttBaselineItem,
@@ -10,21 +11,18 @@ import {
     GanttGroup,
     GanttItem,
     GanttLineClickEvent,
-    GanttPrintService,
     GanttSelectedEvent,
     GanttViewType,
     NgxGanttComponent
 } from 'ngx-gantt';
-import { ThyNotifyService } from 'ngx-tethys/notify';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { random, randomItems } from '../helper';
-import { EChartsOption } from 'echarts';
 
 @Component({
     selector: 'app-gantt-example',
-    templateUrl: './gantt.component.html',
-    providers: [GanttPrintService]
+    templateUrl: './gantt.component.html'
+    // providers: [GanttPrintService]
 })
 export class AppGanttExampleComponent implements OnInit, AfterViewInit {
     views = [
@@ -130,39 +128,39 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         return of(children).pipe(delay(1000));
     };
 
-    constructor(private printService: GanttPrintService, private thyNotify: ThyNotifyService) {}
+    constructor(/*private printService: GanttPrintService*/) {}
 
     ngOnInit(): void {}
 
     ngAfterViewInit() {
-        setTimeout(() => this.ganttComponent.scrollToDate(1627729997), 200);
+        // setTimeout(() => this.ganttComponent.scrollToDate(1627729997), 200);
     }
 
     barClick(event: GanttBarClickEvent) {
-        this.thyNotify.info('Event: barClick', `你点击了 [${event.item.title}]`);
+        // this.thyNotify.info('Event: barClick', `你点击了 [${event.item.title}]`);
     }
 
     lineClick(event: GanttLineClickEvent) {
-        this.thyNotify.info('Event: lineClick', `你点击了 ${event.source.title} 到 ${event.target.title} 的关联线`);
+        // this.thyNotify.info('Event: lineClick', `你点击了 ${event.source.title} 到 ${event.target.title} 的关联线`);
     }
 
     dragMoved(event: GanttDragEvent) {}
 
     dragEnded(event: GanttDragEvent) {
-        this.thyNotify.info('Event: dragEnded', `修改了 [${event.item.title}] 的时间`);
+        // this.thyNotify.info('Event: dragEnded', `修改了 [${event.item.title}] 的时间`);
         this.items = [...this.items];
     }
 
     selectedChange(event: GanttSelectedEvent) {
-        this.thyNotify.info(
-            'Event: selectedChange',
-            `当前选中的 item 的 id 为 ${(event.selectedValue as GanttItem[]).map((item) => item.id).join('、')}`
-        );
+        // this.thyNotify.info(
+        //     'Event: selectedChange',
+        //     `当前选中的 item 的 id 为 ${(event.selectedValue as GanttItem[]).map((item) => item.id).join('、')}`
+        // );
     }
 
-    print(name: string) {
-        this.printService.print(name);
-    }
+    // print(name: string) {
+    //     this.printService.print(name);
+    // }
 
     scrollToToday() {
         this.ganttComponent.scrollToToday();

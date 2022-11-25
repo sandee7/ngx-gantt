@@ -9,7 +9,7 @@
       <ng-template [ngTemplateOutlet]="groupHeaderTemplate" [ngTemplateOutletContext]="{ group: group }"></ng-template>
     </div>
     <div *ngIf="group.expanded" class="gantt-items">
-      <ng-template [ngTemplateOutlet]="ganttItems" [ngTemplateOutletContext]="{ items: group.items }"></ng-template>
+      <ng-template [ngTemplateOutlet]="ganttItems" [ngTemplateOutletContext]="{ items: group.items, group: group }"></ng-template>
     </div>
   </ng-container>
 </div>
@@ -20,9 +20,9 @@
   </div>
 </ng-template>
 
-<ng-template #ganttItems let-items="items">
+<ng-template #ganttItems let-items="items" let-group="group">
   <div class="gantt-item-container">
-    <div [style.height.px]="ganttUpper.styles.lineHeight * getCurrentMaxItemSize()">
+    <div [style.height.px]="ganttUpper.styles.lineHeight * getCurrentMaxItemSize(group)">
       <ng-container *ngFor="let item of items" [class.gantt-main-item-active]="ganttUpper.isSelected(item.id)">
         <ng-container *ngIf="item.type | isGanttCustomItem">
           <ng-template
@@ -43,7 +43,7 @@
             *ngIf="item.type | isGanttBarItem"
             [item]="item"
             [template]="barTemplate"
-            (barClick)="barClick.emit($event)"
+            (barClick)="_barClick.emit($event)"
           ></gantt-bar>
           <gantt-baseline
             *ngIf="ganttUpper.baselineItemsMap[item.id]"
