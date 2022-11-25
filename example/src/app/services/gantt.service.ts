@@ -89,9 +89,11 @@ export class GanttService implements OnDestroy {
     getCurrentMaxItemSize(items: GanttItemInternal[], currentGroupIndex: number) {
         if (items && items.length > 0) {
             return this.maxItemsSize[0];
-        } else {
+        } else if (currentGroupIndex > -1) {
             const maxItemSize = this.maxItemsSize[currentGroupIndex];
             return maxItemSize;
+        } else {
+            return 0;
         }
     }
 
