@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import { GanttDate, differenceInDays, GanttDateUtil } from '../utils/date';
 import { GanttDatePoint } from '../class/date-point';
 import { BehaviorSubject } from 'rxjs';
@@ -107,7 +111,7 @@ export abstract class GanttView {
 
     addStartDate() {
         const start = this.startOf(this.start.add(this.options.addAmount * -1, this.options.addUnit));
-        if (start.value >= this.options.min.value) {
+        if (start.value <= this.options.min.value) {
             const origin = this.start;
             this.start$.next(start);
             this.initialize();

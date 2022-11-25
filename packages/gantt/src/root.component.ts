@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import {
     Component,
     OnInit,
@@ -94,6 +98,7 @@ export class NgxGanttRootComponent implements OnInit, OnDestroy {
             .subscribe((event) => {
                 if (event.direction === ScrollDirection.LEFT) {
                     const dates = this.view.addStartDate();
+                    console.log(dates);
                     if (dates) {
                         event.target.scrollLeft += this.view.getDateRangeWidth(dates.start, dates.end);
                         if (this.ganttUpper.loadOnScroll.observers) {
@@ -105,6 +110,7 @@ export class NgxGanttRootComponent implements OnInit, OnDestroy {
                 }
                 if (event.direction === ScrollDirection.RIGHT) {
                     const dates = this.view.addEndDate();
+                    console.log(dates);
                     if (dates && this.ganttUpper.loadOnScroll.observers) {
                         this.ngZone.run(() =>
                             this.ganttUpper.loadOnScroll.emit({ start: dates.start.getUnixTime(), end: dates.end.getUnixTime() })

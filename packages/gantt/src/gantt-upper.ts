@@ -2,46 +2,46 @@
  * <<licensetext>>
  */
 
+import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { SelectionModel } from '@angular/cdk/collections';
 import {
-    Input,
-    TemplateRef,
-    Output,
-    EventEmitter,
-    ContentChild,
-    ElementRef,
-    HostBinding,
     ChangeDetectorRef,
-    NgZone,
-    SimpleChanges,
-    InjectionToken,
+    ContentChild,
     Directive,
+    ElementRef,
+    EventEmitter,
+    HostBinding,
     Inject,
-    OnInit,
+    InjectionToken,
+    Input,
+    NgZone,
+    OnChanges,
     OnDestroy,
-    OnChanges
+    OnInit,
+    Output,
+    SimpleChanges,
+    TemplateRef
 } from '@angular/core';
 import { from, Subject } from 'rxjs';
-import { takeUntil, take, skip } from 'rxjs/operators';
+import { skip, take, takeUntil } from 'rxjs/operators';
 import {
-    GanttItem,
-    GanttGroup,
-    GanttViewType,
-    GanttLoadOnScrollEvent,
+    GanttBarClickEvent,
     GanttDragEvent,
+    GanttGroup,
     GanttGroupInternal,
+    GanttItem,
     GanttItemInternal,
-    GanttBarClickEvent
+    GanttLoadOnScrollEvent,
+    GanttViewType
 } from './class';
-import { GanttView, GanttViewOptions } from './views/view';
-import { createViewFactory } from './views/factory';
-import { GanttDate } from './utils/date';
-import { GanttStyles, defaultStyles } from './gantt.styles';
-import { uniqBy, flatten, recursiveItems, getFlatItems, Dictionary, keyBy } from './utils/helpers';
-import { GanttDragContainer } from './gantt-drag-container';
-import { GANTT_GLOBAL_CONFIG, GanttGlobalConfig, defaultConfig } from './gantt.config';
-import { SelectionModel } from '@angular/cdk/collections';
-import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { GanttBaselineItem, GanttBaselineItemInternal } from './class/baseline';
+import { GanttDragContainer } from './gantt-drag-container';
+import { defaultConfig, GanttGlobalConfig, GANTT_GLOBAL_CONFIG } from './gantt.config';
+import { defaultStyles, GanttStyles } from './gantt.styles';
+import { GanttDate } from './utils/date';
+import { Dictionary, flatten, getFlatItems, keyBy, recursiveItems, uniqBy } from './utils/helpers';
+import { createViewFactory } from './views/factory';
+import { GanttView, GanttViewOptions } from './views/view';
 
 @Directive()
 export abstract class GanttUpper implements OnChanges, OnInit, OnDestroy {

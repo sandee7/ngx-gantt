@@ -89,8 +89,6 @@ export class GanttTableComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        console.log(this.items);
-        console.log(this.groups);
         if (!changes.groups.currentValue?.length && !changes.items.currentValue?.length) {
             this.ganttTableEmptyClass = true;
         } else {

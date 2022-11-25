@@ -3,7 +3,7 @@
  */
 
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -27,7 +27,9 @@ import { AppGanttGroupsExampleComponent } from './gantt-groups/gantt-groups.comp
 import { AppGanttRangeExampleComponent } from './gantt-range/gantt-range.component';
 import { AppGanttExampleComponent } from './gantt/gantt.component';
 import { GanttService } from './services/gantt.service';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
 
+const antdModule = [NzRadioModule];
 @NgModule({
     declarations: [
         AppComponent,
@@ -39,6 +41,7 @@ import { GanttService } from './services/gantt.service';
         AppGanttFlatComponent
     ],
     imports: [
+        ...antdModule,
         NgxEchartsModule.forRoot({
             echarts: () => import('echarts')
         }),
@@ -57,7 +60,8 @@ import { GanttService } from './services/gantt.service';
         ThySwitchModule,
         ThyDatePickerModule
     ],
-    providers: [GanttService],
+    exports: [...antdModule],
+    providers: [GanttService, { provide: LOCALE_ID, useValue: 'en-US' }],
     bootstrap: [AppComponent]
 })
 export class AppModule {
