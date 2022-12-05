@@ -1,6 +1,11 @@
+/*
+ * <<licensetext>>
+ */
+
 import { Component, OnInit, HostBinding, NgZone, ChangeDetectorRef, ElementRef, Inject } from '@angular/core';
 import { GANTT_UPPER_TOKEN, GanttUpper, GanttItemInternal, GanttGroupInternal, GANTT_GLOBAL_CONFIG, GanttGlobalConfig } from 'ngx-gantt';
 import { startWith, takeUntil } from 'rxjs/operators';
+import { GanttService } from '../../services/gantt.service';
 
 @Component({
     selector: 'app-gantt-flat',
@@ -24,9 +29,10 @@ export class AppGanttFlatComponent extends GanttUpper implements OnInit {
         elementRef: ElementRef<HTMLElement>,
         cdr: ChangeDetectorRef,
         ngZone: NgZone,
-        @Inject(GANTT_GLOBAL_CONFIG) config: GanttGlobalConfig
+        @Inject(GANTT_GLOBAL_CONFIG) config: GanttGlobalConfig,
+        ganttService: GanttService
     ) {
-        super(elementRef, cdr, ngZone, config);
+        super(elementRef, cdr, ngZone, config, ganttService);
     }
 
     private buildGroupMergedItems(items: GanttItemInternal[]) {

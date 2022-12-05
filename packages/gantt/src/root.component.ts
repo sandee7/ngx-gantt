@@ -4,26 +4,26 @@
 
 import {
     Component,
-    OnInit,
-    NgZone,
+    ContentChild,
     ElementRef,
     Inject,
-    ContentChild,
-    TemplateRef,
     Input,
-    Optional,
+    NgZone,
     OnDestroy,
+    OnInit,
+    Optional,
+    TemplateRef,
     ViewChild
 } from '@angular/core';
+import { from, Subject } from 'rxjs';
+import { startWith, take, takeUntil } from 'rxjs/operators';
+import { GanttDragBackdropComponent } from './components/drag-backdrop/drag-backdrop.component';
 import { GanttDomService, ScrollDirection } from './gantt-dom.service';
 import { GanttDragContainer } from './gantt-drag-container';
-import { take, takeUntil, startWith } from 'rxjs/operators';
-import { from, Subject } from 'rxjs';
-import { GanttUpper, GANTT_UPPER_TOKEN } from './gantt-upper';
 import { GanttPrintService } from './gantt-print.service';
-import { passiveListenerOptions } from './utils/passive-listeners';
-import { GanttDragBackdropComponent } from './components/drag-backdrop/drag-backdrop.component';
+import { GanttUpper, GANTT_UPPER_TOKEN } from './gantt-upper';
 import { GanttDate } from './utils/date';
+import { passiveListenerOptions } from './utils/passive-listeners';
 
 @Component({
     selector: 'ngx-gantt-root',
@@ -98,7 +98,6 @@ export class NgxGanttRootComponent implements OnInit, OnDestroy {
             .subscribe((event) => {
                 if (event.direction === ScrollDirection.LEFT) {
                     const dates = this.view.addStartDate();
-                    console.log(dates);
                     if (dates) {
                         event.target.scrollLeft += this.view.getDateRangeWidth(dates.start, dates.end);
                         if (this.ganttUpper.loadOnScroll.observers) {
@@ -110,7 +109,6 @@ export class NgxGanttRootComponent implements OnInit, OnDestroy {
                 }
                 if (event.direction === ScrollDirection.RIGHT) {
                     const dates = this.view.addEndDate();
-                    console.log(dates);
                     if (dates && this.ganttUpper.loadOnScroll.observers) {
                         this.ngZone.run(() =>
                             this.ganttUpper.loadOnScroll.emit({ start: dates.start.getUnixTime(), end: dates.end.getUnixTime() })

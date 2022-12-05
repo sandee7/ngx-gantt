@@ -22,6 +22,7 @@ import {
     TemplateRef,
     ViewChild
 } from '@angular/core';
+import { GanttService } from 'example/src/app/services/gantt.service';
 import { from, Observable, Subject } from 'rxjs';
 import { finalize, startWith, take, takeUntil } from 'rxjs/operators';
 import { GanttItem, GanttItemInternal, GanttLineClickEvent, GanttSelectedEvent } from './class';
@@ -58,6 +59,8 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
 
     @Input() override linkable: boolean;
 
+    @Input() refreshItems: Observable<boolean>;
+
     @Output() lineClick = new EventEmitter<GanttLineClickEvent>();
 
     @Output() selectedChange = new EventEmitter<GanttSelectedEvent>();
@@ -78,9 +81,11 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
         elementRef: ElementRef<HTMLElement>,
         cdr: ChangeDetectorRef,
         ngZone: NgZone,
-        @Inject(GANTT_GLOBAL_CONFIG) config: GanttGlobalConfig
+        @Inject(GANTT_GLOBAL_CONFIG) config: GanttGlobalConfig,
+        ganttService: GanttService
     ) {
-        super(elementRef, cdr, ngZone, config);
+        console.log('1');
+        super(elementRef, cdr, ngZone, config, ganttService);
     }
 
     override ngOnInit() {
@@ -88,6 +93,9 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
         // Note: the zone may be nooped through `BootstrapOptions` when bootstrapping the root module. This means
         // the `onStable` will never emit any value.
         const onStable$ = this.ngZone.isStable ? from(Promise.resolve()) : this.ngZone.onStable.pipe(take(1));
+        this.refreshItems.pipe(takeUntil(this.unsubscribe$)).subscribe((loadOnScrollEmitted) => {
+            this.refreshItemsByChild$.next(loadOnScrollEmitted);
+        });
     }
 
     ngAfterViewInit() {

@@ -22,7 +22,8 @@ import {
     SimpleChanges,
     TemplateRef
 } from '@angular/core';
-import { from, Subject } from 'rxjs';
+import { GanttService } from 'example/src/app/services/gantt.service';
+import { BehaviorSubject, from, Subject } from 'rxjs';
 import { skip, take, takeUntil } from 'rxjs/operators';
 import {
     GanttBarClickEvent,
@@ -53,6 +54,11 @@ export abstract class GanttUpper implements OnChanges, OnInit, OnDestroy {
 
     // eslint-disable-next-line @angular-eslint/no-input-rename
     @Input('baselineItems') originBaselineItems: GanttBaselineItem[] = [];
+
+    // eslint-disable-next-line @angular-eslint/no-input-rename
+
+    public refreshItemsByChild$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    // @Input('refreshItemsByChild') refreshItemsByChild: boolean;
 
     @Input() viewType: GanttViewType = GanttViewType.month;
 
@@ -156,7 +162,8 @@ export abstract class GanttUpper implements OnChanges, OnInit, OnDestroy {
         protected elementRef: ElementRef<HTMLElement>,
         protected cdr: ChangeDetectorRef,
         protected ngZone: NgZone,
-        @Inject(GANTT_GLOBAL_CONFIG) public config: GanttGlobalConfig
+        @Inject(GANTT_GLOBAL_CONFIG) public config: GanttGlobalConfig,
+        private ganttService: GanttService
     ) {}
 
     private createView() {
@@ -315,6 +322,9 @@ export abstract class GanttUpper implements OnChanges, OnInit, OnDestroy {
         this.view.start$.pipe(skip(1), takeUntil(this.unsubscribe$)).subscribe(() => {
             this.computeRefs();
         });
+        this.refreshItemsByChild$.pipe(takeUntil(this.unsubscribe$)).subscribe((event) => {
+            this.computeRefs();
+        });
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -353,7 +363,7 @@ export abstract class GanttUpper implements OnChanges, OnInit, OnDestroy {
             item.updateRefs({
                 width: item.start && item.end ? this.view.getDateRangeWidth(item.start.startOfDay(), item.end.endOfDay()) : 0,
                 x: item.start ? this.view.getXPointByDate(item.start) : 0,
-                y: (this.styles.lineHeight - this.styles.barHeight) / 2 - 1
+                y: item.refs?.y ? item.refs.y : (this.styles.lineHeight - this.styles.barHeight) / 2 - 1
             });
         });
     }

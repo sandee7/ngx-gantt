@@ -18,11 +18,12 @@ import {
     GanttLineClickEvent,
     GanttLoadOnScrollEvent,
     GanttSelectedEvent,
+    GanttView,
     GanttViewType,
     NgxGanttComponent
 } from 'ngx-gantt';
 import { uniqBy } from 'ngx-gantt/utils/helpers';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { random, randomItems } from '../helper';
 
@@ -34,6 +35,10 @@ import { random, randomItems } from '../helper';
 export class AppGanttExampleComponent implements OnInit, AfterViewInit {
     @ViewChild('gantt')
     gantt!: NgxGanttComponent;
+
+    refreshItems: Subject<boolean> = new Subject<boolean>();
+
+    public view: GanttView;
 
     cellWidth: number = 280;
     additionalMonths: number = 3;
@@ -280,11 +285,13 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         } else if (new Date(event.end * 1000) <= new Date(this.gantt.view.end$.value.value)) {
             isFuture = true;
         }
-        this.gantt.view.width += isFuture ? this.primaryCellWidth : 2 * this.primaryCellWidth;
-        this.loadData(isFuture);
+        // this.gantt.view.width += this.primaryCellWidth;
+        this.loadView(isFuture);
+        this.refreshItems.next(true);
     }
 
-    loadData(isFuture: boolean) {
+    loadView(isFuture: boolean) {
+        // todo: add new items to the view
         this.gantt.originItems = [...this.customSetupItems()];
 
         // Load another 3 columns
@@ -358,22 +365,23 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             const newViewDisplayedStartDate = new GanttDate(
                 new GanttDate(this.gantt.view.secondaryDatePoints[0].start.value).addHours(0).addMinutes(0).addSeconds(0).value
             );
-            this.gantt.view.start$ = new BehaviorSubject(newViewDisplayedStartDate);
+            // this.gantt.view.start$ = new BehaviorSubject(newViewDisplayedStartDate);
+            this.gantt.view.start$.next(newViewDisplayedStartDate);
 
             // Set the option's start date (we have to do this because this is how we can scroll)
-            const newViewOptionStartDate = new GanttDate(
-                new GanttDate(this.gantt.view.secondaryDatePoints[0].start.value).addMonths(-3).value
-            );
-            this.gantt.view.options.start = newViewOptionStartDate;
-            this.gantt.view.options.min = newViewOptionStartDate;
+            // const newViewOptionStartDate = new GanttDate(
+            //     new GanttDate(this.gantt.view.secondaryDatePoints[0].start.value).addMonths(-3).value
+            // );
+            // this.gantt.view.options.start = newViewOptionStartDate;
+            // this.gantt.view.options.min = newViewOptionStartDate;
 
-            for (let k = 0; k < this.gantt.view.primaryDatePoints.length; k++) {
-                this.gantt.view.primaryDatePoints[k].x = this.gantt.view.primaryDatePoints[k].x - this.count * this.primaryCellWidth;
-            }
+            // for (let k = 0; k < this.gantt.view.primaryDatePoints.length; k++) {
+            //     this.gantt.view.primaryDatePoints[k].x = this.gantt.view.primaryDatePoints[k].x - this.count * this.primaryCellWidth;
+            // }
 
-            for (let k = 0; k < this.gantt.view.secondaryDatePoints.length; k++) {
-                this.gantt.view.secondaryDatePoints[k].x = this.gantt.view.secondaryDatePoints[k].x - this.count * this.primaryCellWidth;
-            }
+            // for (let k = 0; k < this.gantt.view.secondaryDatePoints.length; k++) {
+            //     this.gantt.view.secondaryDatePoints[k].x = this.gantt.view.secondaryDatePoints[k].x - this.count * this.primaryCellWidth;
+            // }
         }
 
         console.log(this.gantt);

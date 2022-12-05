@@ -3,30 +3,30 @@
  */
 
 import {
+    AfterViewInit,
     Component,
-    OnInit,
-    HostBinding,
     ElementRef,
+    EventEmitter,
+    HostBinding,
+    Inject,
+    NgZone,
     OnChanges,
     OnDestroy,
-    Inject,
-    ViewChild,
+    OnInit,
     Output,
-    EventEmitter,
-    AfterViewInit,
-    ViewChildren,
     QueryList,
-    NgZone
+    ViewChild,
+    ViewChildren
 } from '@angular/core';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { startWith, switchMap, takeUntil } from 'rxjs/operators';
-import { GanttBarDrag } from './bar-drag';
-import { hexToRgb } from '../../utils/helpers';
-import { GanttDragContainer } from '../../gantt-drag-container';
-import { barBackground } from '../../gantt.styles';
 import { GanttBarClickEvent } from '../../class';
-import { GANTT_UPPER_TOKEN, GanttUpper } from '../../gantt-upper';
+import { GanttDragContainer } from '../../gantt-drag-container';
 import { GanttItemUpper } from '../../gantt-item-upper';
+import { GanttUpper, GANTT_UPPER_TOKEN } from '../../gantt-upper';
+import { barBackground } from '../../gantt.styles';
+import { hexToRgb } from '../../utils/helpers';
+import { GanttBarDrag } from './bar-drag';
 
 function linearGradient(sideOrCorner: string, color: string, stop: string) {
     return `linear-gradient(${sideOrCorner},${color} 0%,${stop} 40%)`;
@@ -126,9 +126,5 @@ export class NgxGanttBarComponent extends GanttItemUpper implements OnInit, Afte
 
     stopPropagation(event: Event) {
         event.stopPropagation();
-    }
-
-    alma(item: any) {
-        console.log(item);
     }
 }
