@@ -84,7 +84,6 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
         @Inject(GANTT_GLOBAL_CONFIG) config: GanttGlobalConfig,
         ganttService: GanttService
     ) {
-        console.log('1');
         super(elementRef, cdr, ngZone, config, ganttService);
     }
 

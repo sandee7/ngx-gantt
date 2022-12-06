@@ -155,6 +155,7 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
     ngAfterViewInit() {
         // setTimeout(() => this.ganttComponent.scrollToDate(1627729997), 200);
         this.cellWidth = this.gantt.view.cellWidth;
+        console.log(this.gantt);
     }
 
     barClick(event: GanttBarClickEvent) {
@@ -279,111 +280,14 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
     }
 
     loadOnScroll(event: GanttLoadOnScrollEvent) {
-        let isFuture = true;
-        if (new Date(event.start * 1000) <= new Date(this.gantt.view.start$.value.value)) {
-            isFuture = false;
-        } else if (new Date(event.end * 1000) <= new Date(this.gantt.view.end$.value.value)) {
-            isFuture = true;
-        }
-        // this.gantt.view.width += this.primaryCellWidth;
-        this.loadView(isFuture);
-        this.refreshItems.next(true);
-    }
-
-    loadView(isFuture: boolean) {
-        // todo: add new items to the view
-        this.gantt.originItems = [...this.customSetupItems()];
-
-        // Load another 3 columns
-        const primaryPointElement = this.gantt.view.primaryDatePoints[isFuture ? this.gantt.view.primaryDatePoints.length - 1 : 0];
-
-        // Set the next/previous primary point
-        const primaryPointElementDate = new GanttDate(primaryPointElement.start.value).addMonths(
-            this.additionalMonths * (isFuture ? 1 : -1)
-        );
-        const newPrimaryPointelement = new GanttDatePoint(
-            primaryPointElementDate,
-            formatDate(new Date(primaryPointElementDate.value), 'YYYY', 'en-US'),
-            primaryPointElement.x + (isFuture ? this.primaryCellWidth : this.primaryCellWidth * -1),
-            18
-        );
-
-        if (isFuture) {
-            this.gantt.view.primaryDatePoints.push(newPrimaryPointelement);
-            // Set the next/previous secondary points
-            let secondaryPoints: GanttDatePoint[] = [];
-            for (let i = 1; i < 4; i++) {
-                secondaryPoints.push(
-                    new GanttDatePoint(
-                        primaryPointElement.start.addMonths(2 + i),
-                        formatDate(primaryPointElement.start.addMonths(2 + i).value, 'MMMM', 'en-US'),
-                        primaryPointElement.x + this.cellWidth + this.cellWidth * i,
-                        36
-                    )
-                );
-            }
-            this.gantt.view.secondaryDatePoints = [...this.gantt.view.secondaryDatePoints, ...secondaryPoints];
-
-            // Set the displayed end date
-            const newViewDisplayedEndDate = new GanttDate(
-                this.gantt.view.secondaryDatePoints[this.gantt.view.secondaryDatePoints.length - 1].start
-                    .addMonths(1)
-                    .addDays(-1)
-                    .addHours(23)
-                    .addMinutes(59)
-                    .addSeconds(59).value
-            );
-            this.gantt.view.end$ = new BehaviorSubject(newViewDisplayedEndDate);
-
-            // Set the option's end date (we have to do this because this is how we can scroll)
+        // if it is a future scroll
+        if (new Date(event.end * 1000) <= new Date(this.gantt.view.end$.value.value)) {
             const newViewOptionEndDate = new GanttDate(
                 this.gantt.view.secondaryDatePoints[this.gantt.view.secondaryDatePoints.length - 1].start.addMonths(4).value
             );
-            this.gantt.view.options.end = newViewOptionEndDate;
             this.gantt.view.options.max = newViewOptionEndDate;
-        } else {
-            this.count++;
-            // Add the newly created primary point to the primary points
-            this.gantt.view.primaryDatePoints = [newPrimaryPointelement, ...this.gantt.view.primaryDatePoints];
-
-            // Set the previous secondary points
-            let secondaryPoints: GanttDatePoint[] = [];
-            for (let i = 3; i > 0; i--) {
-                const tmpDate = primaryPointElement.start.addMonths(i * -1);
-                secondaryPoints.push(
-                    new GanttDatePoint(
-                        tmpDate,
-                        formatDate(tmpDate.value, 'MMMM', 'en-US'),
-                        primaryPointElement.x + (this.cellWidth + this.cellWidth * i) * -1,
-                        36
-                    )
-                );
-            }
-            this.gantt.view.secondaryDatePoints = secondaryPoints.concat(this.gantt.view.secondaryDatePoints);
-
-            // Set the displayed start date
-            const newViewDisplayedStartDate = new GanttDate(
-                new GanttDate(this.gantt.view.secondaryDatePoints[0].start.value).addHours(0).addMinutes(0).addSeconds(0).value
-            );
-            // this.gantt.view.start$ = new BehaviorSubject(newViewDisplayedStartDate);
-            this.gantt.view.start$.next(newViewDisplayedStartDate);
-
-            // Set the option's start date (we have to do this because this is how we can scroll)
-            // const newViewOptionStartDate = new GanttDate(
-            //     new GanttDate(this.gantt.view.secondaryDatePoints[0].start.value).addMonths(-3).value
-            // );
-            // this.gantt.view.options.start = newViewOptionStartDate;
-            // this.gantt.view.options.min = newViewOptionStartDate;
-
-            // for (let k = 0; k < this.gantt.view.primaryDatePoints.length; k++) {
-            //     this.gantt.view.primaryDatePoints[k].x = this.gantt.view.primaryDatePoints[k].x - this.count * this.primaryCellWidth;
-            // }
-
-            // for (let k = 0; k < this.gantt.view.secondaryDatePoints.length; k++) {
-            //     this.gantt.view.secondaryDatePoints[k].x = this.gantt.view.secondaryDatePoints[k].x - this.count * this.primaryCellWidth;
-            // }
         }
-
         console.log(this.gantt);
+        this.refreshItems.next(true);
     }
 }

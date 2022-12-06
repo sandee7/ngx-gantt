@@ -92,8 +92,6 @@ export abstract class GanttView {
     abstract getSecondaryDatePoints(): GanttDatePoint[];
 
     protected getDateIntervalWidth(start: GanttDate, end: GanttDate) {
-        // console.log('view start', start);
-        // console.log('item start', end);
         let result = 0;
         const days = differenceInDays(end.value, start.value);
         for (let i = 0; i < Math.abs(days); i++) {
@@ -113,11 +111,9 @@ export abstract class GanttView {
 
     addStartDate() {
         const start = this.startOf(this.start.add(this.options.addAmount * -1, this.options.addUnit));
-        console.log(start);
         if (start.value <= this.options.min.value) {
             const origin = this.start;
             this.start$.next(start);
-            console.log(this.start$);
             this.initialize();
             return { start: this.start, end: origin };
         }

@@ -322,8 +322,10 @@ export abstract class GanttUpper implements OnChanges, OnInit, OnDestroy {
         this.view.start$.pipe(skip(1), takeUntil(this.unsubscribe$)).subscribe(() => {
             this.computeRefs();
         });
-        this.refreshItemsByChild$.pipe(takeUntil(this.unsubscribe$)).subscribe((event) => {
-            this.computeRefs();
+        this.refreshItemsByChild$.pipe(takeUntil(this.unsubscribe$)).subscribe((refresh) => {
+            if (refresh) {
+                this.computeRefs();
+            }
         });
     }
 
