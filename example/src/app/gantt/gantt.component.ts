@@ -2,14 +2,12 @@
  * <<licensetext>>
  */
 
-import { formatDate } from '@angular/common';
-import { AfterViewInit, Component, HostBinding, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostBinding, OnInit, ViewChild } from '@angular/core';
 import { EChartsOption } from 'echarts';
 import {
     GanttBarClickEvent,
     GanttBaselineItem,
     GanttDate,
-    GanttDatePoint,
     GanttDragEvent,
     GanttGroup,
     GanttGroupInternal,
@@ -23,7 +21,7 @@ import {
     NgxGanttComponent
 } from 'ngx-gantt';
 import { uniqBy } from 'ngx-gantt/utils/helpers';
-import { BehaviorSubject, of, Subject } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { random, randomItems } from '../helper';
 
@@ -289,5 +287,17 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         }
         console.log(this.gantt);
         this.refreshItems.next(true);
+    }
+
+    createEvent(event: GanttItem) {
+        event.id = Math.floor(100000 + Math.random() * 900000).toString();
+        const groupIds = this.getGroupIds();
+        const randomIndex = Math.floor(Math.random() * groupIds.length);
+        event.group_id = groupIds[randomIndex];
+        this.items = [event, ...this.items];
+    }
+
+    getGroupIds(): string[] {
+        return this.groups.map((group) => group.id);
     }
 }

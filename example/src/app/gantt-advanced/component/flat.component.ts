@@ -3,6 +3,7 @@
  */
 
 import { Component, OnInit, HostBinding, NgZone, ChangeDetectorRef, ElementRef, Inject } from '@angular/core';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { GANTT_UPPER_TOKEN, GanttUpper, GanttItemInternal, GanttGroupInternal, GANTT_GLOBAL_CONFIG, GanttGlobalConfig } from 'ngx-gantt';
 import { startWith, takeUntil } from 'rxjs/operators';
 import { GanttService } from '../../services/gantt.service';
@@ -30,9 +31,10 @@ export class AppGanttFlatComponent extends GanttUpper implements OnInit {
         cdr: ChangeDetectorRef,
         ngZone: NgZone,
         @Inject(GANTT_GLOBAL_CONFIG) config: GanttGlobalConfig,
-        ganttService: GanttService
+        ganttService: GanttService,
+        nzMessageService: NzMessageService
     ) {
-        super(elementRef, cdr, ngZone, config, ganttService);
+        super(elementRef, cdr, ngZone, config, ganttService, nzMessageService);
     }
 
     private buildGroupMergedItems(items: GanttItemInternal[]) {

@@ -25,6 +25,7 @@
       [rangeTemplate]="rangeTemplate"
       (barClick)="barClick.emit($event)"
       (lineClick)="lineClick.emit($event)"
+      (newEventClick)="createEvent($event)"
     >
     </gantt-main>
   </ng-template>

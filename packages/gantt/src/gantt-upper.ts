@@ -23,6 +23,7 @@ import {
     TemplateRef
 } from '@angular/core';
 import { GanttService } from 'example/src/app/services/gantt.service';
+import { NzMessageComponent, NzMessageService } from 'ng-zorro-antd/message';
 import { BehaviorSubject, from, Subject } from 'rxjs';
 import { skip, take, takeUntil } from 'rxjs/operators';
 import {
@@ -112,6 +113,8 @@ export abstract class GanttUpper implements OnChanges, OnInit, OnDestroy {
 
     @Output() barClick = new EventEmitter<GanttBarClickEvent>();
 
+    @Output() newEventClick = new EventEmitter<Event>();
+
     @ContentChild('bar', { static: true }) barTemplate: TemplateRef<any>;
 
     @ContentChild('range', { static: true }) rangeTemplate: TemplateRef<any>;
@@ -163,7 +166,8 @@ export abstract class GanttUpper implements OnChanges, OnInit, OnDestroy {
         protected cdr: ChangeDetectorRef,
         protected ngZone: NgZone,
         @Inject(GANTT_GLOBAL_CONFIG) public config: GanttGlobalConfig,
-        private ganttService: GanttService
+        private ganttService: GanttService,
+        protected nzMessageService: NzMessageService
     ) {}
 
     private createView() {

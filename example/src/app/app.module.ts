@@ -27,9 +27,21 @@ import { AppGanttGroupsExampleComponent } from './gantt-groups/gantt-groups.comp
 import { AppGanttRangeExampleComponent } from './gantt-range/gantt-range.component';
 import { AppGanttExampleComponent } from './gantt/gantt.component';
 import { GanttService } from './services/gantt.service';
+import { AsPipe } from './pipes/as.pipe';
+import { ModalService } from './services/modal.service';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { CreateEventComponent } from './modals/create-event/update-category/create-event-modal.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormService } from './services/form.service';
+import { en_US, NZ_I18N } from 'ng-zorro-antd/i18n';
 
-const antdModule = [NzRadioModule];
+const antdModule = [NzRadioModule, NzButtonModule, NzFormModule, NzMessageModule, NzModalModule, NzInputModule, NzDatePickerModule];
 @NgModule({
     declarations: [
         AppComponent,
@@ -38,9 +50,12 @@ const antdModule = [NzRadioModule];
         AppGanttAdvancedExampleComponent,
         AppGanttGroupsExampleComponent,
         AppGanttRangeExampleComponent,
-        AppGanttFlatComponent
+        AppGanttFlatComponent,
+        AsPipe,
+        CreateEventComponent
     ],
     imports: [
+        ReactiveFormsModule,
         ...antdModule,
         NgxEchartsModule.forRoot({
             echarts: () => import('echarts')
@@ -60,8 +75,15 @@ const antdModule = [NzRadioModule];
         ThySwitchModule,
         ThyDatePickerModule
     ],
-    exports: [...antdModule],
-    providers: [GanttService, { provide: LOCALE_ID, useValue: 'en-US' }],
+    exports: [ReactiveFormsModule, ...antdModule, AsPipe],
+    providers: [
+        GanttService,
+        { provide: LOCALE_ID, useValue: 'en-US' },
+        { provide: NZ_I18N, useValue: en_US },
+        ModalService,
+        AsPipe,
+        FormService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

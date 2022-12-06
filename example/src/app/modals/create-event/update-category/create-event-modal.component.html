@@ -1,0 +1,74 @@
+<!--
+  ~ <<licensetext>>
+  -->
+
+<form nz-form [formGroup]="eventForm">
+  <nz-form-item>
+    <nz-form-label nzRequired [nzSpan]="8">Title</nz-form-label>
+    <nz-form-control nzHasFeedback [nzErrorTip]="errorTemplate">
+      <nz-input-group>
+        <input
+          type="text"
+          nz-input
+          nzRequired
+          [name]="eventForm.controls['title']"
+          [formControl]="eventForm.controls['title'] | as: FormControl"
+          placeholder="Title..."
+        />
+      </nz-input-group>
+      <ng-template #errorTemplate>
+        <div
+          class="code-error"
+          nz-form-explain
+          *ngIf="
+          eventForm.controls['title']?.dirty &&
+          eventForm.controls['title']?.touched &&
+          eventForm.controls['title']?.errors?.['required']
+        "
+        >
+          <span>Please add a title!</span>
+        </div>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8">Description</nz-form-label>
+    <nz-form-control [nzErrorTip]="descriptionErrorTemplate" class="text-area-container">
+      <nz-input-group>
+        <nz-textarea-count [nzMaxCharacterCount]="100">
+          <textarea
+            rows="2"
+            nz-input
+            type="text"
+            [name]="eventForm.controls['description']"
+            [formControl]="eventForm.controls['description'] | as: FormControl"
+            placeholder="Lorem ipsum dolor sit amet"
+            class="text-area"
+          ></textarea>
+          <ng-template #descriptionErrorTemplate let-control>
+            <ng-container *ngIf="control.hasError('maxlength')"> The maximum length is 100 character. </ng-container>
+          </ng-template>
+        </nz-textarea-count>
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label nzRequired [nzSpan]="8"> Start time: </nz-form-label>
+    <nz-form-control [nzErrorTip]="'It is required!'">
+      <nz-date-picker [formControl]="eventForm.controls['start'] | as: FormControl" (ngModelChange)="(null)"> </nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label nzRequired [nzSpan]="8"> End time: </nz-form-label>
+    <nz-form-control [nzErrorTip]="'It is required!'">
+      <nz-date-picker [formControl]="eventForm.controls['end'] | as: FormControl" (ngModelChange)="(null)"> </nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+<div *nzModalFooter>
+  <button nz-button nzType="default" (click)="save()" class="cancel-button">Ok</button>
+  <button nz-button nzType="default" (click)="close()" class="cancel-button">Close</button>
+</div>

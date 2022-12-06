@@ -155,9 +155,9 @@ export abstract class GanttView {
 
     // 获取当前时间的X坐标
     getTodayXPoint(): number {
-        const toady = new GanttDate().startOfDay();
-        if (toady.value > this.start.value && toady.value < this.end.value) {
-            const x = this.getXPointByDate(toady) + this.getDayOccupancyWidth(toady) / 2;
+        const today = new GanttDate().startOfDay();
+        if (today.value > this.start.value && today.value < this.end.value) {
+            const x = this.getXPointByDate(today) + this.getDayOccupancyWidth(today) / 2;
             return x;
         } else {
             return null;

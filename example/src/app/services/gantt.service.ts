@@ -5,6 +5,9 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { GanttGroupInternal, GanttItem, GanttItemInternal } from 'ngx-gantt';
 import { Subject } from 'rxjs';
+import { UntilDestroy } from '@ngneat/until-destroy';
+
+@UntilDestroy()
 @Injectable()
 export class GanttService implements OnDestroy {
     private unsubscribe$ = new Subject<void>();

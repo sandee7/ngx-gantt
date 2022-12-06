@@ -28,6 +28,8 @@ export class GanttMainComponent implements OnInit, OnChanges {
 
     @Output() _barClick = new EventEmitter<GanttBarClickEvent>();
 
+    @Output() newEventClick = new EventEmitter<Event>();
+
     // @Output() override lineClick = new EventEmitter<GanttLineClickEvent>();
 
     @HostBinding('class.gantt-main-container') ganttMainClass = true;
