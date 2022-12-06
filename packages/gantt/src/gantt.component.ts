@@ -23,6 +23,8 @@ import {
     ViewChild
 } from '@angular/core';
 import { GanttService } from 'example/src/app/services/gantt.service';
+import { ModalService } from 'example/src/app/services/modal.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { from, Observable, Subject } from 'rxjs';
 import { finalize, startWith, take, takeUntil } from 'rxjs/operators';
 import { GanttItem, GanttItemInternal, GanttLineClickEvent, GanttSelectedEvent } from './class';
@@ -65,6 +67,8 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
 
     @Output() selectedChange = new EventEmitter<GanttSelectedEvent>();
 
+    @Output() newEventCreation = new EventEmitter<any>();
+
     @ContentChild(NgxGanttTableComponent) table: NgxGanttTableComponent;
 
     @ContentChildren(NgxGanttTableColumnComponent, { descendants: true }) columns: QueryList<NgxGanttTableColumnComponent>;
@@ -72,6 +76,9 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
     @ContentChild('tableEmpty', { static: true }) tableEmptyTemplate: TemplateRef<any>;
 
     @ViewChild('ganttRoot') ganttRoot: NgxGanttRootComponent;
+
+    @ViewChild('gantt')
+    gantt!: NgxGanttComponent;
 
     private ngUnsubscribe$ = new Subject();
 
@@ -82,9 +89,11 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
         cdr: ChangeDetectorRef,
         ngZone: NgZone,
         @Inject(GANTT_GLOBAL_CONFIG) config: GanttGlobalConfig,
-        ganttService: GanttService
+        ganttService: GanttService,
+        nzMessageService: NzMessageService,
+        private modalService: ModalService
     ) {
-        super(elementRef, cdr, ngZone, config, ganttService);
+        super(elementRef, cdr, ngZone, config, ganttService, nzMessageService);
     }
 
     override ngOnInit() {
@@ -159,5 +168,20 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
 
     scrollToDate(date: number | GanttDate) {
         this.ganttRoot.scrollToDate(date);
+    }
+
+    createEvent(event: PointerEvent) {
+        const clickedX = event.offsetX;
+        const clickedDate = this.view.getDateByXPoint(clickedX);
+        this.nzMessageService.info(`The clicked point is at: ${clickedDate.value}`);
+        this.modalService.createEventModal(
+            clickedDate.value,
+            (result) => {
+                this.newEventCreation.emit(result);
+            },
+            () => {
+                console.log('error');
+            }
+        );
     }
 }
