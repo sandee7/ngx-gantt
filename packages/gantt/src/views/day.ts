@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import { GanttView, GanttViewOptions, primaryDatePointTop, secondaryDatePointTop, GanttViewDate } from './view';
 import { GanttDate, eachWeekOfInterval, eachDayOfInterval } from '../utils/date';
 import { GanttDatePoint } from '../class/date-point';
@@ -9,6 +13,8 @@ const viewOptions: GanttViewOptions = {
     addAmount: 1,
     addUnit: 'month'
 };
+
+const dayCellWidths: number[] = [35, 55, 75];
 
 export class GanttViewDay extends GanttView {
     override showWeekBackdrop = true;
@@ -70,5 +76,10 @@ export class GanttViewDay extends GanttView {
             points.push(point);
         }
         return points;
+    }
+
+    modifyCellWidth(i: number) {
+        viewOptions.cellWidth = dayCellWidths[i];
+        super.modifyOptions(viewOptions);
     }
 }

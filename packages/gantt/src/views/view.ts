@@ -91,6 +91,13 @@ export abstract class GanttView {
     // 获取二级时间点（坐标，显示名称）
     abstract getSecondaryDatePoints(): GanttDatePoint[];
 
+    abstract modifyCellWidth(i: number): void;
+
+    modifyOptions(options: GanttViewOptions) {
+        this.options = Object.assign({}, viewOptions, options);
+        this.initialize();
+    }
+
     protected getDateIntervalWidth(start: GanttDate, end: GanttDate) {
         let result = 0;
         const days = differenceInDays(end.value, start.value);
@@ -107,6 +114,7 @@ export abstract class GanttView {
         this.width = this.getWidth();
         this.cellWidth = this.getCellWidth();
         this.primaryWidth = this.getPrimaryWidth();
+        console.log('??');
     }
 
     addStartDate() {
@@ -150,6 +158,7 @@ export abstract class GanttView {
 
     // 获取单个网格的宽度
     getCellWidth() {
+        console.log(this.options.cellWidth);
         return this.options.cellWidth;
     }
 

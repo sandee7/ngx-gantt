@@ -2,7 +2,7 @@
  * <<licensetext>>
  */
 
-import { AfterViewInit, Component, ElementRef, HostBinding, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostBinding, HostListener, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { EChartsOption } from 'echarts';
 import {
     GanttBarClickEvent,
@@ -37,11 +37,7 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
     refreshItems: Subject<boolean> = new Subject<boolean>();
 
     public view: GanttView;
-
-    cellWidth: number = 280;
-    additionalMonths: number = 3;
-    primaryCellWidth: number = this.cellWidth * this.additionalMonths; // 3 is because we add an additional 3 columns to the view
-    count = 0;
+    zoomIndex = 0;
 
     views = [
         {
@@ -117,7 +113,7 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
 
     viewOptions = {
         dateFormat: {
-            month: 'M月'
+            month: 'M'
         }
     };
 
@@ -139,6 +135,31 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
 
     @HostBinding('class.gantt-example-component') class = true;
 
+    @HostListener('mousewheel', ['$event'])
+    onMouseWheel(event: WheelEvent) {
+        if (event.ctrlKey) {
+            event.preventDefault();
+            const zoomIn = event.deltaY < 0;
+            const currentViewTypeIndex = this.views.findIndex((view) => view.value === this.viewType);
+            if (zoomIn) {
+                if (this.zoomIndex < 2) {
+                    this.zoomIndex++;
+                } else if (this.views[currentViewTypeIndex + 1]) {
+                    this.zoomIndex = 0;
+                    this.viewType = this.views[currentViewTypeIndex + 1].value;
+                }
+            } else {
+                if (this.zoomIndex > 0) {
+                    this.zoomIndex--;
+                } else if (this.views[currentViewTypeIndex - 1]) {
+                    this.zoomIndex = 2;
+                    this.viewType = this.views[currentViewTypeIndex - 1].value;
+                }
+            }
+            this.cdr.detectChanges();
+        }
+    }
+
     @ViewChild('gantt') ganttComponent: NgxGanttComponent;
 
     childrenResolve = (item: GanttItem) => {
@@ -146,13 +167,11 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         return of(children).pipe(delay(1000));
     };
 
-    constructor(/*private printService: GanttPrintService*/) {}
+    constructor(/*private printService: GanttPrintService*/ private cdr: ChangeDetectorRef) {}
 
     ngOnInit(): void {}
 
     ngAfterViewInit() {
-        // setTimeout(() => this.ganttComponent.scrollToDate(1627729997), 200);
-        this.cellWidth = this.gantt.view.cellWidth;
         console.log(this.gantt);
     }
 

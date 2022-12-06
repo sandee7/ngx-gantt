@@ -170,7 +170,7 @@ export abstract class GanttUpper implements OnChanges, OnInit, OnDestroy {
         protected nzMessageService: NzMessageService
     ) {}
 
-    private createView() {
+    protected createView() {
         const viewDate = this.getViewDate();
         this.view = createViewFactory(this.viewType, viewDate.start, viewDate.end, this.viewOptions);
     }

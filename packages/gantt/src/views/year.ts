@@ -1,15 +1,21 @@
+/*
+ * <<licensetext>>
+ */
+
 import { GanttView, GanttViewOptions, primaryDatePointTop, secondaryDatePointTop, GanttViewDate } from './view';
 import { GanttDate } from '../utils/date';
 import { GanttDatePoint } from '../class/date-point';
 import { eachYearOfInterval, differenceInCalendarYears } from 'date-fns';
 
 const viewOptions: GanttViewOptions = {
-    cellWidth: 480,
+    cellWidth: 520,
     start: new GanttDate().addYears(-2).startOfYear(),
     end: new GanttDate().addYears(2).endOfYear(),
     addAmount: 1,
     addUnit: 'year'
 };
+
+const yearCellWidths: number[] = [520, 540, 560];
 
 export class GanttViewYear extends GanttView {
     constructor(start: GanttViewDate, end: GanttViewDate, options?: GanttViewOptions) {
@@ -58,5 +64,10 @@ export class GanttViewYear extends GanttView {
             points.push(point);
         }
         return points;
+    }
+
+    modifyCellWidth(i: number) {
+        viewOptions.cellWidth = yearCellWidths[i];
+        super.modifyOptions(viewOptions);
     }
 }

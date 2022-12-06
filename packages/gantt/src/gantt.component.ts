@@ -16,9 +16,11 @@ import {
     Inject,
     Input,
     NgZone,
+    OnChanges,
     OnInit,
     Output,
     QueryList,
+    SimpleChanges,
     TemplateRef,
     ViewChild
 } from '@angular/core';
@@ -52,7 +54,7 @@ import { GanttDate } from './utils/date';
         }
     ]
 })
-export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewInit {
+export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewInit, OnChanges {
     @Input() maxLevel = 2;
 
     @Input() async: boolean;
@@ -62,6 +64,8 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
     @Input() override linkable: boolean;
 
     @Input() refreshItems: Observable<boolean>;
+
+    @Input() zoomIndex: number;
 
     @Output() lineClick = new EventEmitter<GanttLineClickEvent>();
 
@@ -115,6 +119,17 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
             });
             this.cdr.detectChanges();
         });
+    }
+
+    override ngOnChanges(changes: SimpleChanges): void {
+        if (!this.firstChange) {
+            if (changes.viewType) {
+                this.createView();
+            }
+            if (changes.zoomIndex) {
+                this.modifyViewZoom();
+            }
+        }
     }
 
     expandChildren(item: GanttItemInternal) {
@@ -183,5 +198,9 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
                 console.log('error');
             }
         );
+    }
+
+    modifyViewZoom() {
+        this.view.modifyCellWidth(this.zoomIndex);
     }
 }

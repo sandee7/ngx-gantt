@@ -1,16 +1,24 @@
+/*
+ * <<licensetext>>
+ */
+
 import { GanttDatePoint } from '../class/date-point';
 import { eachWeekOfInterval, GanttDate } from '../utils/date';
 import { GanttView, GanttViewDate, GanttViewOptions, primaryDatePointTop, secondaryDatePointTop } from './view';
 
 const viewOptions: GanttViewOptions = {
-    cellWidth: 280,
+    cellWidth: 245,
     start: new GanttDate().startOfYear().startOfWeek({ weekStartsOn: 1 }),
     end: new GanttDate().endOfYear().endOfWeek({ weekStartsOn: 1 }),
     addAmount: 1,
     addUnit: 'month'
 };
 
+const weekCellWidths: number[] = [245, 260, 280];
+
 export class GanttViewWeek extends GanttView {
+    subOptions: GanttViewOptions;
+
     constructor(start: GanttViewDate, end: GanttViewDate, options?: GanttViewOptions) {
         super(start, end, Object.assign({}, viewOptions, options));
     }
@@ -62,5 +70,10 @@ export class GanttViewWeek extends GanttView {
             points.push(point);
         }
         return points;
+    }
+
+    modifyCellWidth(i: number) {
+        viewOptions.cellWidth = weekCellWidths[i];
+        super.modifyOptions(viewOptions);
     }
 }

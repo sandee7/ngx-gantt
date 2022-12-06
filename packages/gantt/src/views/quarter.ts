@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import { GanttView, GanttViewOptions, primaryDatePointTop, secondaryDatePointTop, GanttViewDate } from './view';
 import { GanttDate } from '../utils/date';
 import { GanttDatePoint } from '../class/date-point';
@@ -12,6 +16,8 @@ const viewOptions: GanttViewOptions = {
     addAmount: 1,
     addUnit: 'year'
 };
+
+const quarterCellWidths: number[] = [500, 510, 520];
 
 export class GanttViewQuarter extends GanttView {
     constructor(start: GanttViewDate, end: GanttViewDate, options?: GanttViewOptions) {
@@ -64,5 +70,10 @@ export class GanttViewQuarter extends GanttView {
             points.push(point);
         }
         return points;
+    }
+
+    modifyCellWidth(i: number) {
+        viewOptions.cellWidth = quarterCellWidths[i];
+        super.modifyOptions(viewOptions);
     }
 }
