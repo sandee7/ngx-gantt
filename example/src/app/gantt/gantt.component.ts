@@ -53,7 +53,7 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             value: GanttViewType.month
         },
         {
-            name: 'Season',
+            name: 'Quarter',
             value: GanttViewType.quarter
         },
         {
@@ -137,27 +137,25 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
 
     @HostListener('mousewheel', ['$event'])
     onMouseWheel(event: WheelEvent) {
-        if (event.ctrlKey) {
-            event.preventDefault();
-            const zoomIn = event.deltaY < 0;
-            const currentViewTypeIndex = this.views.findIndex((view) => view.value === this.viewType);
-            if (zoomIn) {
-                if (this.zoomIndex < 2) {
-                    this.zoomIndex++;
-                } else if (this.views[currentViewTypeIndex + 1]) {
-                    this.zoomIndex = 0;
-                    this.viewType = this.views[currentViewTypeIndex + 1].value;
-                }
-            } else {
-                if (this.zoomIndex > 0) {
-                    this.zoomIndex--;
-                } else if (this.views[currentViewTypeIndex - 1]) {
-                    this.zoomIndex = 2;
-                    this.viewType = this.views[currentViewTypeIndex - 1].value;
-                }
+        event.preventDefault();
+        const zoomIn = event.deltaY < 0;
+        const currentViewTypeIndex = this.views.findIndex((view) => view.value === this.viewType);
+        if (zoomIn) {
+            if (this.zoomIndex < 2) {
+                this.zoomIndex++;
+            } else if (this.views[currentViewTypeIndex + 1]) {
+                this.zoomIndex = 0;
+                this.viewType = this.views[currentViewTypeIndex + 1].value;
             }
-            this.cdr.detectChanges();
+        } else {
+            if (this.zoomIndex > 0) {
+                this.zoomIndex--;
+            } else if (this.views[currentViewTypeIndex - 1]) {
+                this.zoomIndex = 2;
+                this.viewType = this.views[currentViewTypeIndex - 1].value;
+            }
         }
+        this.cdr.detectChanges();
     }
 
     @ViewChild('gantt') ganttComponent: NgxGanttComponent;

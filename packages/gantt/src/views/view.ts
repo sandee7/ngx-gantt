@@ -114,7 +114,6 @@ export abstract class GanttView {
         this.width = this.getWidth();
         this.cellWidth = this.getCellWidth();
         this.primaryWidth = this.getPrimaryWidth();
-        console.log('??');
     }
 
     addStartDate() {
