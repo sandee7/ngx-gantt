@@ -34,14 +34,27 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { CreateEventComponent } from './modals/create-event/update-category/create-event-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormService } from './services/form.service';
 import { en_US, NZ_I18N } from 'ng-zorro-antd/i18n';
+import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
+import { EventService } from './services/event.service';
 
-const antdModule = [NzRadioModule, NzButtonModule, NzFormModule, NzMessageModule, NzModalModule, NzInputModule, NzDatePickerModule];
+const antdModule = [
+    NzRadioModule,
+    NzButtonModule,
+    NzFormModule,
+    NzMessageModule,
+    NzModalModule,
+    NzInputModule,
+    NzDatePickerModule,
+    NzSelectModule,
+    NzTimePickerModule
+];
 @NgModule({
     declarations: [
         AppComponent,
@@ -82,7 +95,8 @@ const antdModule = [NzRadioModule, NzButtonModule, NzFormModule, NzMessageModule
         { provide: NZ_I18N, useValue: en_US },
         ModalService,
         AsPipe,
-        FormService
+        FormService,
+        EventService
     ],
     bootstrap: [AppComponent]
 })

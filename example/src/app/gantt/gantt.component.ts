@@ -24,6 +24,7 @@ import { uniqBy } from 'ngx-gantt/utils/helpers';
 import { of, Subject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { random, randomItems } from '../helper';
+import { Event } from '../interfaces/event.interface';
 
 @Component({
     selector: 'app-gantt-example',
@@ -64,7 +65,8 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
 
     groups: GanttGroup[] = [
         { id: '000000', title: 'nullás group' },
-        { id: '000001', title: 'egyes group' }
+        { id: '000001', title: 'egyes group' },
+        { id: '000002', title: 'no group' }
     ];
 
     items: GanttItem[] = [
@@ -88,17 +90,17 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         { id: '0000016', title: 'Task 16', start: 1624965197, end: 1627211597, group_id: '000001' },
         { id: '0000017', title: 'Task 17', start: 1641035597, end: 1649157197, group_id: '000001' },
         { id: '0000018', title: 'Task 18', start: 1637061197, end: 1642677197, group_id: '000001' },
-        { id: '0000019', title: 'Task 19', start: 1637925197, end: 1646305997 },
-        { id: '0000020', title: 'Task 20', start: 1628334797, end: 1629889997 },
-        { id: '0000021', title: 'Task 21', start: 1622891597, end: 1627643597 },
-        { id: '0000022', title: 'Task 22', start: 1616238797, end: 1620731597 },
-        { id: '0000023', title: 'Task 23', start: 1626693197, end: 1630149197 },
-        { id: '0000024', title: 'Task 24', start: 1626174797, end: 1626952397 },
-        { id: '0000025', title: 'Task 25', start: 1631013197, end: 1637493197 },
-        { id: '0000026', title: 'Task 26', start: 1635937997, end: 1643886797 },
-        { id: '0000027', title: 'Task 27', start: 1637665997, end: 1644059597 },
-        { id: '0000028', title: 'Task 28', start: 1611400397, end: 1615547597 },
-        { id: '0000029', title: 'Task 29', start: 1618053197, end: 1619176397 }
+        { id: '0000019', title: 'Task 19', start: 1637925197, end: 1646305997, group_id: '000002' },
+        { id: '0000020', title: 'Task 20', start: 1628334797, end: 1629889997, group_id: '000002' },
+        { id: '0000021', title: 'Task 21', start: 1622891597, end: 1627643597, group_id: '000002' },
+        { id: '0000022', title: 'Task 22', start: 1616238797, end: 1620731597, group_id: '000002' },
+        { id: '0000023', title: 'Task 23', start: 1626693197, end: 1630149197, group_id: '000002' },
+        { id: '0000024', title: 'Task 24', start: 1626174797, end: 1626952397, group_id: '000002' },
+        { id: '0000025', title: 'Task 25', start: 1631013197, end: 1637493197, group_id: '000002' },
+        { id: '0000026', title: 'Task 26', start: 1635937997, end: 1643886797, group_id: '000002' },
+        { id: '0000027', title: 'Task 27', start: 1637665997, end: 1644059597, group_id: '000002' },
+        { id: '0000028', title: 'Task 28', start: 1611400397, end: 1615547597, group_id: '000002' },
+        { id: '0000029', title: 'Task 29', start: 1618053197, end: 1619176397, group_id: '000002' }
     ];
 
     baselineItems: GanttBaselineItem[] = [];
@@ -227,12 +229,16 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         this.refreshItems.next(true);
     }
 
-    createEvent(event: GanttItem) {
+    createEvent(event: Event) {
         event.id = Math.floor(100000 + Math.random() * 900000).toString();
         const groupIds = this.getGroupIds();
         const randomIndex = Math.floor(Math.random() * groupIds.length);
-        event.group_id = groupIds[randomIndex];
-        this.items = [event, ...this.items];
+        // let item = {
+
+        // };
+        // event.group_id = groupIds[randomIndex];
+        // this.items = [event, ...this.items];
+        console.log(event);
     }
 
     getGroupIds(): string[] {

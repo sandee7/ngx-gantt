@@ -5,6 +5,7 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { State } from '../interfaces/event.interface';
 
 @UntilDestroy()
 @Injectable()
@@ -39,27 +40,72 @@ export class FormService {
     }
 
     eventFormGroup(): UntypedFormGroup {
+        const now = new Date();
         return this.fb.group(
             {
+                timestamp: [now, {}],
                 id: ['', {}],
-                title: [
+                name: [
                     '',
                     {
                         validators: Validators.compose([Validators.required])
                     }
                 ],
-                start: [
+                description: ['', { validators: Validators.compose([Validators.maxLength(150)]) }],
+                action: [
                     '',
                     {
                         validators: Validators.compose([Validators.required])
                     }
                 ],
-                end: [
+                eventTypeName: [
                     '',
+                    {
+                        validators: Validators.compose([Validators.required])
+                    }
+                ],
+                eventTypeVersion: [
+                    '',
+                    {
+                        validators: Validators.compose([Validators.required])
+                    }
+                ],
+                startDate: [
+                    now,
+                    {
+                        validators: Validators.compose([Validators.required])
+                    }
+                ],
+                startTime: [
+                    now,
+                    {
+                        validators: Validators.compose([Validators.required])
+                    }
+                ],
+                endDate: [
+                    now,
+                    {
+                        validators: Validators.compose([Validators.required])
+                    }
+                ],
+                endTime: [
+                    now,
+                    {
+                        validators: Validators.compose([Validators.required])
+                    }
+                ],
+                state: [
+                    State.CREATED,
                     {
                         validators: Validators.compose([Validators.required])
                     }
                 ]
+                // relations: [
+                //     '',
+                //     {
+                //         validators: Validators.compose([Validators.required])
+                //     }
+                // ]
             },
             { validators: [], updateOn: 'change' }
         );

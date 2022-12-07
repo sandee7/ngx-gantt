@@ -22,3 +22,7 @@ app-example-components,
 .dg-main {
     top: 0 !important;
 }
+
+button[aria-label="Close"]:focus {
+    outline: none;
+}

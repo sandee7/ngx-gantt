@@ -4,6 +4,9 @@
 
 import { Component, Input, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { addDays } from 'date-fns';
+import { EventType, Relation } from 'example/src/app/interfaces/event.interface';
+import { EventService } from 'example/src/app/services/event.service';
 import { FormService } from 'example/src/app/services/form.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalRef } from 'ng-zorro-antd/modal';
@@ -17,6 +20,12 @@ export class CreateEventComponent implements OnInit {
     @Input() start: Date;
     @Input() end: Date;
 
+    eventTypes: EventType[];
+    eventTypeNames: string[];
+    selectedEventTypeVersions: number[];
+    selectedEventTypeActions: string[];
+    // selectedEventTypeRelations: Map<string, string | number | boolean>;
+
     eventForm: UntypedFormGroup;
 
     // Making types available for the template
@@ -28,13 +37,49 @@ export class CreateEventComponent implements OnInit {
      * @param modal Get the modal's functions, actions
      * @param message Set the messages after a successful or failed HTTP call
      */
-    constructor(private formService: FormService, private modal: NzModalRef, private message: NzMessageService) {}
+    constructor(
+        private formService: FormService,
+        private modal: NzModalRef,
+        private message: NzMessageService,
+        private eventService: EventService
+    ) {}
 
     /**
      * Component initialization
      */
     ngOnInit(): void {
         this.eventForm = this.formService.eventFormGroup();
+        this.setInitialValues();
+        this.eventTypes = this.eventService.getEventTypes();
+        this.eventTypeNames = [...new Set(this.eventTypes.map((eventType) => eventType.name))];
+    }
+
+    setInitialValues() {
+        const endDate = addDays(this.start, 7);
+        this.eventForm.patchValue({ startDate: this.start, startTime: this.start, endDate, endTime: endDate });
+    }
+
+    getVersionsByEventTypeName() {
+        const selectedEventTypeName = this.eventForm.get('eventTypeName').value;
+        this.selectedEventTypeVersions = this.eventTypes
+            .filter((eventType) => eventType.name === selectedEventTypeName)
+            .map((eventType) => eventType.version);
+    }
+
+    getActionsByVersion() {
+        const selectedEventTypeVersion = this.eventForm.get('eventTypeVersion').value;
+        const selectedEventType = this.eventTypes.find(
+            (eventType) => eventType.name === this.eventForm.get('eventTypeName').value && eventType.version === selectedEventTypeVersion
+        );
+
+        this.selectedEventTypeActions = selectedEventType.actions;
+        // this.selectedEventTypeRelations = selectedEventType.relationsMap;
+    }
+
+    setDate(start: boolean): Date {
+        const selectedDate = this.eventForm.get((start ? 'start' : 'end') + 'Date').value as Date;
+        const selectedTime = this.eventForm.get((start ? 'start' : 'end') + 'Time').value as Date;
+        return new Date(new Date(selectedDate).setHours(selectedTime.getHours(), selectedTime.getMinutes()));
     }
 
     /**
@@ -58,9 +103,17 @@ export class CreateEventComponent implements OnInit {
             //   });
             // return actPromise;
             this.modal.result = {
-                title: this.eventForm.get('title')?.value,
-                start: this.eventForm.get('start')?.value,
-                end: this.eventForm.get('end')?.value
+                timestamp: this.eventForm.get('timestamp').value,
+                id: this.eventForm.get('id').value,
+                name: this.eventForm.get('name').value,
+                description: this.eventForm.get('description').value,
+                action: this.eventForm.get('action').value,
+                eventTypeName: this.eventForm.get('eventTypeName').value,
+                eventTypeVersion: this.eventForm.get('eventTypeVersion').value,
+                startTime: this.setDate(true),
+                endTime: this.setDate(false),
+                state: this.eventForm.get('state').value
+                // relations: this.eventForm.get('relations').value
             };
             this.message.success('Yaay, new event created!');
             return Promise.resolve().then(() => this.modal.triggerOk());

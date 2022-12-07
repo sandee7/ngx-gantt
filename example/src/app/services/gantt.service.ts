@@ -2,16 +2,13 @@
  * <<licensetext>>
  */
 
-import { Injectable, OnDestroy } from '@angular/core';
-import { GanttGroupInternal, GanttItem, GanttItemInternal } from 'ngx-gantt';
-import { Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { GanttGroupInternal, GanttItemInternal } from 'ngx-gantt';
 
 @UntilDestroy()
 @Injectable()
-export class GanttService implements OnDestroy {
-    private unsubscribe$ = new Subject<void>();
-
+export class GanttService {
     public maxItemsSize: number[] = [];
 
     constructor() {}
@@ -98,10 +95,5 @@ export class GanttService implements OnDestroy {
         } else {
             return 0;
         }
-    }
-
-    ngOnDestroy() {
-        this.unsubscribe$.next();
-        this.unsubscribe$.complete();
     }
 }

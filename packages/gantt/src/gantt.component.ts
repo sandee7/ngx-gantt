@@ -197,7 +197,7 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
                 this.newEventCreation.emit(result);
             },
             () => {
-                console.log('error');
+                console.log('Modal closed.');
             }
         );
     }
