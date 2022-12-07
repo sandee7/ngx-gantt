@@ -122,12 +122,14 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
     }
 
     override ngOnChanges(changes: SimpleChanges): void {
+        super.ngOnChanges(changes);
         if (!this.firstChange) {
             if (changes.viewType) {
                 this.createView();
             }
             if (changes.zoomIndex) {
                 this.modifyViewZoom();
+                this.computeRefs();
             }
         }
     }

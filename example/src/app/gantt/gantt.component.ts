@@ -41,24 +41,20 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
 
     views = [
         {
-            name: 'Day',
-            value: GanttViewType.day
-        },
-        {
-            name: 'Week',
-            value: GanttViewType.week
+            name: 'Year',
+            value: GanttViewType.year
         },
         {
             name: 'Month',
             value: GanttViewType.month
         },
         {
-            name: 'Quarter',
-            value: GanttViewType.quarter
+            name: 'Week',
+            value: GanttViewType.week
         },
         {
-            name: 'Year',
-            value: GanttViewType.year
+            name: 'Day',
+            value: GanttViewType.day
         }
     ];
 
@@ -137,25 +133,27 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
 
     @HostListener('mousewheel', ['$event'])
     onMouseWheel(event: WheelEvent) {
-        event.preventDefault();
-        const zoomIn = event.deltaY < 0;
-        const currentViewTypeIndex = this.views.findIndex((view) => view.value === this.viewType);
-        if (zoomIn) {
-            if (this.zoomIndex < 2) {
-                this.zoomIndex++;
-            } else if (this.views[currentViewTypeIndex + 1]) {
-                this.zoomIndex = 0;
-                this.viewType = this.views[currentViewTypeIndex + 1].value;
+        if (event.ctrlKey) {
+            event.preventDefault();
+            const zoomIn = event.deltaY < 0;
+            const currentViewTypeIndex = this.views.findIndex((view) => view.value === this.viewType);
+            if (zoomIn) {
+                if (this.zoomIndex < 2) {
+                    this.zoomIndex++;
+                } else if (this.views[currentViewTypeIndex + 1]) {
+                    this.zoomIndex = 0;
+                    this.viewType = this.views[currentViewTypeIndex + 1].value;
+                }
+            } else {
+                if (this.zoomIndex > 0) {
+                    this.zoomIndex--;
+                } else if (this.views[currentViewTypeIndex - 1]) {
+                    this.zoomIndex = 2;
+                    this.viewType = this.views[currentViewTypeIndex - 1].value;
+                }
             }
-        } else {
-            if (this.zoomIndex > 0) {
-                this.zoomIndex--;
-            } else if (this.views[currentViewTypeIndex - 1]) {
-                this.zoomIndex = 2;
-                this.viewType = this.views[currentViewTypeIndex - 1].value;
-            }
+            this.cdr.detectChanges();
         }
-        this.cdr.detectChanges();
     }
 
     @ViewChild('gantt') ganttComponent: NgxGanttComponent;

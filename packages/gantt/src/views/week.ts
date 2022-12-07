@@ -14,7 +14,7 @@ const viewOptions: GanttViewOptions = {
     addUnit: 'month'
 };
 
-const weekCellWidths: number[] = [245, 260, 280];
+const weekCellWidths: number[] = [750, 800, 850];
 
 export class GanttViewWeek extends GanttView {
     subOptions: GanttViewOptions;

@@ -14,7 +14,7 @@ const viewOptions: GanttViewOptions = {
     addUnit: 'month'
 };
 
-const dayCellWidths: number[] = [35, 55, 75];
+const dayCellWidths: number[] = [125, 300, 600];
 
 export class GanttViewDay extends GanttView {
     override showWeekBackdrop = true;

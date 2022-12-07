@@ -15,7 +15,7 @@ const viewOptions: GanttViewOptions = {
     addUnit: 'year'
 };
 
-const yearCellWidths: number[] = [520, 540, 560];
+const yearCellWidths: number[] = [1000, 4000, 6000];
 
 export class GanttViewYear extends GanttView {
     constructor(start: GanttViewDate, end: GanttViewDate, options?: GanttViewOptions) {

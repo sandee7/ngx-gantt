@@ -14,7 +14,7 @@ const viewOptions: GanttViewOptions = {
     addUnit: 'quarter'
 };
 
-const monthCellWidths: number[] = [280, 380, 500];
+const monthCellWidths: number[] = [500, 2000, 3000];
 
 export class GanttViewMonth extends GanttView {
     constructor(start: GanttViewDate, end: GanttViewDate, options?: GanttViewOptions) {
