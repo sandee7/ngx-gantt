@@ -24,7 +24,7 @@
     <ngx-gantt #gantt [groups]="groups" [items]="items" [viewType]="viewType" [draggable]="true">
       <ngx-gantt-table>
         <ngx-gantt-column name="标题" width="180px">
-          <ng-template #cell let-item="item"> {{ item.title }} </ng-template>
+          <ng-template #cell let-item="item"> {{ item.name }} </ng-template>
         </ngx-gantt-column>
         <ngx-gantt-column name="开始时间" width="140px">
           <ng-template #cell let-item="item">

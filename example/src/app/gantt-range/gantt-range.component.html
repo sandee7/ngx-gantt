@@ -51,11 +51,11 @@
     <ngx-gantt-table>
       <ngx-gantt-column name="标题">
         <ng-template #cell let-item="item">
-          {{ item.title }}
+          {{ item.name }}
         </ng-template>
       </ngx-gantt-column>
       <ngx-gantt-column>
-        <ng-template #header> <span style="font-weight: bold;">开始时间</span> </ng-template>
+        <ng-template #header> <span style="font-weight: bold">开始时间</span> </ng-template>
         <ng-template #cell let-item="item">
           {{ item.start * 1000 | date: 'yyyy-MM-dd' }}
         </ng-template>

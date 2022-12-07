@@ -76,10 +76,10 @@ export class CreateEventComponent implements OnInit {
         // this.selectedEventTypeRelations = selectedEventType.relationsMap;
     }
 
-    setDate(start: boolean): Date {
+    setDate(start: boolean): number {
         const selectedDate = this.eventForm.get((start ? 'start' : 'end') + 'Date').value as Date;
         const selectedTime = this.eventForm.get((start ? 'start' : 'end') + 'Time').value as Date;
-        return new Date(new Date(selectedDate).setHours(selectedTime.getHours(), selectedTime.getMinutes()));
+        return new Date(selectedDate).setHours(selectedTime.getHours(), selectedTime.getMinutes());
     }
 
     /**
@@ -110,8 +110,8 @@ export class CreateEventComponent implements OnInit {
                 action: this.eventForm.get('action').value,
                 eventTypeName: this.eventForm.get('eventTypeName').value,
                 eventTypeVersion: this.eventForm.get('eventTypeVersion').value,
-                startTime: this.setDate(true),
-                endTime: this.setDate(false),
+                start: this.setDate(true),
+                end: this.setDate(false),
                 state: this.eventForm.get('state').value
                 // relations: this.eventForm.get('relations').value
             };

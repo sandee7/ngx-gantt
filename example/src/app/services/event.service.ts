@@ -8,7 +8,7 @@ import { Event, EventType } from '../interfaces/event.interface';
 
 export const productionLine1EventType: EventType = {
     timestamp: new Date(),
-    name: 'Prod Line 1',
+    name: 'Production Line',
     version: 1,
     actions: ['break', 'work', 'repair'],
     relationsMap: new Map(Object.entries({ lineId: 2, floorId: 5 }))
@@ -16,7 +16,7 @@ export const productionLine1EventType: EventType = {
 
 export const productionLine2EventType: EventType = {
     timestamp: new Date(),
-    name: 'Prod Line 1',
+    name: 'Production Line',
     version: 2,
     actions: ['break', 'repair'],
     relationsMap: new Map(Object.entries({ lineId: 2, floorId: 5 }))

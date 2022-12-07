@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import { addDays, getUnixTime } from 'date-fns';
 import { GanttGroup, GanttItem } from 'ngx-gantt';
 
@@ -12,7 +16,7 @@ export function randomItems(length: number, parent?: GanttItem, group?: string) 
         const end = addDays(start, random(0, 100));
         items.push({
             id: `${parent?.id || group || ''}00000${i}`,
-            title: `${parent?.title || 'Task'}-${i}`,
+            title: `${parent?.name || 'Task'}-${i}`,
             start: getUnixTime(start),
             end: getUnixTime(end),
             group_id: group

@@ -5,6 +5,7 @@
 import { GanttDate } from '../utils/date';
 import { BehaviorSubject } from 'rxjs';
 import { GanttViewType } from './view-type';
+import { Event, Relation, State } from 'example/src/app/interfaces/event.interface';
 
 export interface GanttItemRefs {
     width: number;
@@ -19,10 +20,21 @@ export enum GanttItemType {
 }
 
 export interface GanttItem<T = unknown> {
+    // Start of Event type things
     id: string;
-    title: string;
+    // todo remove optionality
+    timestamp?: Date;
+    name: string;
+    description?: string;
+    action?: string;
+    eventTypeName: string;
+    eventTypeVersion: number;
     start?: number;
     end?: number;
+    state: State;
+    // todo remove optionality
+    relations?: Relation;
+    // End of Event type things
     group_id?: string;
     draggable?: boolean;
     linkable?: boolean;
@@ -37,8 +49,19 @@ export interface GanttItem<T = unknown> {
 }
 
 export class GanttItemInternal {
+    // Start of Event type things
     id: string;
-    title: string;
+    // todo remove optionality
+    timestamp?: Date;
+    name: string;
+    description?: string;
+    action?: string;
+    eventTypeName: string;
+    eventTypeVersion: number;
+    state: State;
+    // todo remove optionality
+    relations?: Relation;
+    // End of Event type things
     start: GanttDate;
     end: GanttDate;
     color?: string;
