@@ -48,12 +48,6 @@ export class FormService {
                         validators: Validators.compose([Validators.required])
                     }
                 ],
-                description: [
-                    '',
-                    {
-                        validators: Validators.compose([Validators.maxLength(100)])
-                    }
-                ],
                 start: [
                     '',
                     {

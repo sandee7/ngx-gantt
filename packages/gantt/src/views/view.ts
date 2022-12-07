@@ -157,7 +157,7 @@ export abstract class GanttView {
 
     // 获取单个网格的宽度
     getCellWidth() {
-        console.log(this.options.cellWidth);
+        // console.log(this.options.cellWidth);
         return this.options.cellWidth;
     }
 
