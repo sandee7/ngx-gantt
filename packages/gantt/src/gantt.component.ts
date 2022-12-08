@@ -67,6 +67,8 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
 
     @Input() zoomIndex: number;
 
+    @Input() isChartClicked: boolean;
+
     @Output() lineClick = new EventEmitter<GanttLineClickEvent>();
 
     @Output() selectedChange = new EventEmitter<GanttSelectedEvent>();
@@ -188,18 +190,20 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
     }
 
     createEvent(event: PointerEvent) {
-        const clickedX = event.offsetX;
-        const clickedDate = this.view.getDateByXPoint(clickedX);
-        this.nzMessageService.info(`The clicked point is at: ${clickedDate.value}`);
-        this.modalService.createEventModal(
-            clickedDate.value,
-            (result) => {
-                this.newEventCreation.emit(result);
-            },
-            () => {
-                console.log('Modal closed.');
-            }
-        );
+        if (!this.isChartClicked) {
+            const clickedX = event.offsetX;
+            const clickedDate = this.view.getDateByXPoint(clickedX);
+            this.nzMessageService.info(`The clicked point is at: ${clickedDate.value}`);
+            this.modalService.createEventModal(
+                clickedDate.value,
+                (result) => {
+                    this.newEventCreation.emit(result);
+                },
+                () => {
+                    console.log('Modal closed.');
+                }
+            );
+        }
     }
 
     modifyViewZoom() {

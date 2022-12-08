@@ -10,6 +10,7 @@ import { ECHART_HEIGHT } from '../constants/global-variables';
 @UntilDestroy()
 @Injectable()
 export class GanttService {
+    ITEM_HEIGHT = 45;
     public maxItemsSize: number[] = [];
 
     constructor() {}
@@ -48,7 +49,7 @@ export class GanttService {
             }
             if (counter === 0) {
                 map.set([new Date(item.start?.value), new Date(item.end?.value)], [item]);
-                maxItemY = Math.max(maxItemY, item.refs.y);
+                maxItemY = Math.max(maxItemY, item.refs.y + this.ITEM_HEIGHT);
             }
         });
 
@@ -75,14 +76,14 @@ export class GanttService {
             newEnd = Math.max(newEnd, value.end.value.getTime());
             value.refs.y = yDistance;
             // Add distance between the items
-            yDistance += 45 + (value.origin.options ? this.getHeightByOptions(value) : 0);
+            yDistance += this.ITEM_HEIGHT + (value.origin.options ? this.getHeightByOptions(value) : 0);
         });
         const newKey: [Date, Date] = [new Date(newStart), new Date(newEnd)];
         map.set(newKey, values);
         // Remove the 'merged' map items
         keyPairs.map((keyPair) => map.delete(keyPair));
 
-        return { map, yDistance };
+        return { map, yDistance: values.length === 1 ? item.refs.y : yDistance };
     }
 
     getMaxY(values: GanttItemInternal[]): number {

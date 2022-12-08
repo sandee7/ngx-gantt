@@ -22,6 +22,7 @@
   [viewOptions]="viewOptions"
   [refreshItems]="refreshItems.asObservable()"
   [zoomIndex]="zoomIndex"
+  [isChartClicked]="isChartClicked"
   (barClick)="barClick($event)"
   (lineClick)="lineClick($event)"
   (dragMoved)="dragMoved($event)"
@@ -36,10 +37,20 @@
     </ngx-gantt-column>
   </ngx-gantt-table>
 
-  <ng-template #bar let-item="item">
+  <ng-template #bar let-item="item" let-index>
     <div class="item-content-container">
       <span style="color: #fff">&nbsp;&nbsp;{{ item.name }} </span>
-      <div *ngIf="item.options?.echart" echarts [options]="item.options?.echart" class="echart"></div>
+      <div
+        *ngIf="item.options?.echart"
+        echarts
+        [options]="item.options?.echart"
+        class="echart"
+        (mouseover)="displayBiggerChart(item.options.echart)"
+        (mouseout)="removeBiggerChart()"
+        (click)="displayBiggerChart(item.options.echart, $event)"
+      ></div>
     </div>
   </ng-template>
 </ngx-gantt>
+
+<div *ngIf="hoveredEChart" echarts [options]="hoveredEChart" class="hovered-echart" id="hoveredEchart"></div>

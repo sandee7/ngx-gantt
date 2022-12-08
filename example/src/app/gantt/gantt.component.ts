@@ -2,7 +2,18 @@
  * <<licensetext>>
  */
 
-import { AfterViewInit, Component, ElementRef, HostBinding, HostListener, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import {
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    HostBinding,
+    HostListener,
+    OnInit,
+    OnChanges,
+    TemplateRef,
+    ViewChild,
+    SimpleChanges
+} from '@angular/core';
 import { EChartsOption } from 'echarts';
 import {
     GanttBarClickEvent,
@@ -10,9 +21,7 @@ import {
     GanttDate,
     GanttDragEvent,
     GanttGroup,
-    GanttGroupInternal,
     GanttItem,
-    GanttItemInternal,
     GanttLineClickEvent,
     GanttLoadOnScrollEvent,
     GanttSelectedEvent,
@@ -20,8 +29,7 @@ import {
     GanttViewType,
     NgxGanttComponent
 } from 'ngx-gantt';
-import { uniqBy } from 'ngx-gantt/utils/helpers';
-import { of, Subject } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { random, randomItems } from '../helper';
 import { Event, EventType, State } from '../interfaces/event.interface';
@@ -36,6 +44,8 @@ import { EventService } from '../services/event.service';
 export class AppGanttExampleComponent implements OnInit, AfterViewInit {
     @ViewChild('gantt')
     gantt!: NgxGanttComponent;
+
+    @ViewChild('hoveredEchart') hoveredEchartTmplRef: TemplateRef<any>;
 
     refreshItems: Subject<boolean> = new Subject<boolean>();
 
@@ -69,6 +79,8 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
     groups: GanttGroup[] = [{ id: '000000', title: 'groupless' }];
     groupIds: string[] = [];
 
+    hoveredEChart: EChartsOption;
+    isChartClicked: boolean = false;
     chartOptions: EChartsOption[] = [
         {
             xAxis: {
@@ -729,6 +741,16 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         }
     }
 
+    @HostListener('document:click', ['$event'])
+    chartClick(event: PointerEvent) {
+        if (this.isChartClicked && this.hoveredEchartTmplRef && this.hoveredEchartTmplRef.elementRef.nativeElement.contains(event.target)) {
+            event.stopPropagation();
+        } else if (this.isChartClicked && this.hoveredEChart) {
+            this.isChartClicked = false;
+            this.hoveredEChart = null;
+        }
+    }
+
     @ViewChild('gantt') ganttComponent: NgxGanttComponent;
 
     childrenResolve = (item: GanttItem) => {
@@ -841,6 +863,17 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             item.group_id = this.groups[0].id;
         }
         this.items = [item, ...this.items];
-        console.log(item);
+    }
+
+    displayBiggerChart(chart: EChartsOption, clickEvent?: MouseEvent) {
+        this.hoveredEChart = chart;
+        if (clickEvent) {
+            this.isChartClicked = true;
+        }
+    }
+    removeBiggerChart() {
+        if (!this.isChartClicked) {
+            this.hoveredEChart = null;
+        }
     }
 }
