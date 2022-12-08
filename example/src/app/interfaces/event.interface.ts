@@ -1,6 +1,12 @@
 /*
  * <<licensetext>>
  */
+
+import { EChartsOption } from 'echarts';
+
+/*
+ * <<licensetext>>
+ */
 export interface Event {
     timestamp: Date;
     id: string;
@@ -34,4 +40,8 @@ export interface EventType {
     version: number;
     actions: string[];
     relationsMap: Map<string, string | number | boolean>;
+}
+
+export interface Options {
+    echart: EChartsOption;
 }

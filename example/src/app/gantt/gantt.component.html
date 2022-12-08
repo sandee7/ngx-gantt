@@ -37,7 +37,9 @@
   </ngx-gantt-table>
 
   <ng-template #bar let-item="item">
-    <span style="color: #fff">&nbsp;&nbsp;{{ item.name }} </span>
-    <div echarts [options]="chartOption" class="demo-chart"></div>
+    <div class="item-content-container">
+      <span style="color: #fff">&nbsp;&nbsp;{{ item.name }} </span>
+      <div *ngIf="item.options?.echart" echarts [options]="item.options?.echart" class="echart"></div>
+    </div>
   </ng-template>
 </ngx-gantt>

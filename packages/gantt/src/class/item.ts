@@ -2,10 +2,10 @@
  * <<licensetext>>
  */
 
-import { GanttDate } from '../utils/date';
+import { Options, Relation, State } from 'example/src/app/interfaces/event.interface';
 import { BehaviorSubject } from 'rxjs';
+import { GanttDate } from '../utils/date';
 import { GanttViewType } from './view-type';
-import { Event, Relation, State } from 'example/src/app/interfaces/event.interface';
 
 export interface GanttItemRefs {
     width: number;
@@ -34,6 +34,7 @@ export interface GanttItem<T = unknown> {
     state: State;
     // todo remove optionality
     relations?: Relation;
+    options?: Options;
     // End of Event type things
     group_id?: string;
     draggable?: boolean;

@@ -22,7 +22,7 @@
 
 <ng-template #ganttItems let-items="items" let-group="group">
   <div class="gantt-item-container">
-    <div [style.height.px]="ganttUpper.styles.lineHeight * getCurrentMaxItemSize(group)" (click)="newEventClick.emit($event)">
+    <div [style.height.px]="getCurrentMaxItemSize(group)" (click)="newEventClick.emit($event)">
       <ng-container *ngFor="let item of items" [class.gantt-main-item-active]="ganttUpper.isSelected(item.id)">
         <ng-container *ngIf="item.type | isGanttCustomItem">
           <ng-template
@@ -60,7 +60,3 @@
     </div>
   </div>
 </ng-template>
-
-<!-- <ng-template #chart>
-  <div echarts [options]="chartOption" class="demo-chart"></div>
-</ng-template> -->

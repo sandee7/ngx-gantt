@@ -8,7 +8,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { DocgeniTemplateModule } from '@docgeni/template';
-import { NgxEchartsModule } from 'ngx-echarts';
 import { NgxGanttModule } from 'ngx-gantt';
 import { ThyButtonModule } from 'ngx-tethys/button';
 import { ThyCheckboxModule } from 'ngx-tethys/checkbox';
@@ -43,6 +42,7 @@ import { FormService } from './services/form.service';
 import { en_US, NZ_I18N } from 'ng-zorro-antd/i18n';
 import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { EventService } from './services/event.service';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 const antdModule = [
     NzRadioModule,
@@ -70,9 +70,6 @@ const antdModule = [
     imports: [
         ReactiveFormsModule,
         ...antdModule,
-        NgxEchartsModule.forRoot({
-            echarts: () => import('echarts')
-        }),
         BrowserModule,
         BrowserAnimationsModule,
         CommonModule,
@@ -86,7 +83,10 @@ const antdModule = [
         ThyCheckboxModule,
         ThyNotifyModule,
         ThySwitchModule,
-        ThyDatePickerModule
+        ThyDatePickerModule,
+        NgxEchartsModule.forRoot({
+            echarts: () => import('echarts')
+        })
     ],
     exports: [ReactiveFormsModule, ...antdModule, AsPipe],
     providers: [

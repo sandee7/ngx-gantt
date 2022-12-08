@@ -5,6 +5,7 @@
 import { Injectable } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { GanttGroupInternal, GanttItemInternal } from 'ngx-gantt';
+import { ECHART_HEIGHT } from '../constants/global-variables';
 
 @UntilDestroy()
 @Injectable()
@@ -26,32 +27,32 @@ export class GanttService {
 
     getMaxItemSize(items: GanttItemInternal[]): number {
         let map: Map<[Date, Date], GanttItemInternal[]> = new Map();
-        let maxItemsSize = 0;
+        let maxItemY = 0;
         items.map((item) => {
             let counter = 0;
             for (let [key, value] of map) {
                 // If the two ranges are intersects each other
                 if (key[1] >= item.start?.value && key[0] <= item.end?.value) {
-                    item.refs.y += item.refs.y * 5 * value.length;
+                    counter++;
                     value.push(item);
                     const newStart = Math.min(key[0].getTime(), item.start?.value.getTime());
                     const newEnd = Math.max(key[1].getTime(), item.end?.value.getTime());
                     const newKey: [Date, Date] = [new Date(newStart), new Date(newEnd)];
                     map.set(newKey, value);
                     map.delete(key);
-                    counter++;
-                    maxItemsSize = Math.max(maxItemsSize, value.length);
-                    map = this.mergeMapItems(map, item);
+                    const result = this.mergeMapItems(map, item);
+                    map = result.map;
+                    maxItemY = Math.max(maxItemY, result.yDistance);
                     return;
                 }
             }
             if (counter === 0) {
                 map.set([new Date(item.start?.value), new Date(item.end?.value)], [item]);
-                maxItemsSize = Math.max(maxItemsSize, 1);
+                maxItemY = Math.max(maxItemY, item.refs.y);
             }
         });
 
-        return maxItemsSize;
+        return maxItemY;
     }
 
     mergeMapItems(map: Map<[Date, Date], GanttItemInternal[]>, item: GanttItemInternal) {
@@ -67,19 +68,21 @@ export class GanttService {
         // Set the newly merged map
         let newStart: number = values[0].start.getTime();
         let newEnd: number = values[0].end.getTime();
-        let yDistance = 9;
+        // todo: Create a global variable
+        let yDistance = 10; // The distance from the top
         values.map((value) => {
             newStart = Math.min(newStart, value.start.value.getTime());
             newEnd = Math.max(newEnd, value.end.value.getTime());
             value.refs.y = yDistance;
-            yDistance += 45;
+            // Add distance between the items
+            yDistance += 45 + (value.origin.options ? this.getHeightByOptions(value) : 0);
         });
         const newKey: [Date, Date] = [new Date(newStart), new Date(newEnd)];
         map.set(newKey, values);
         // Remove the 'merged' map items
         keyPairs.map((keyPair) => map.delete(keyPair));
 
-        return map;
+        return { map, yDistance };
     }
 
     getMaxY(values: GanttItemInternal[]): number {
@@ -94,6 +97,12 @@ export class GanttService {
             return maxItemSize;
         } else {
             return 0;
+        }
+    }
+
+    getHeightByOptions(item: GanttItemInternal) {
+        if (item.origin.options.echart) {
+            return ECHART_HEIGHT;
         }
     }
 }

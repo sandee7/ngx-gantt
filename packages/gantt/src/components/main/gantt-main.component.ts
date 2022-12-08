@@ -2,9 +2,8 @@
  * <<licensetext>>
  */
 
-import { Component, EventEmitter, HostBinding, Inject, Input, OnInit, OnChanges, Output, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Inject, Input, OnChanges, OnInit, Output, TemplateRef } from '@angular/core';
 import { EChartsOption } from 'echarts';
-import { AppGanttExampleComponent } from 'example/src/app/gantt/gantt.component';
 import { GanttService } from 'example/src/app/services/gantt.service';
 import { GanttBarClickEvent, GanttGroupInternal, GanttItemInternal } from '../../class';
 import { GanttUpper, GANTT_UPPER_TOKEN } from '../../gantt-upper';
@@ -35,22 +34,6 @@ export class GanttMainComponent implements OnInit, OnChanges {
     @HostBinding('class.gantt-main-container') ganttMainClass = true;
 
     firstChange = true;
-
-    chartOption: EChartsOption = {
-        xAxis: {
-            type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            {
-                data: [820, 932, 901, 934, 1290, 1330, 1320],
-                type: 'pie'
-            }
-        ]
-    };
 
     constructor(@Inject(GANTT_UPPER_TOKEN) public ganttUpper: GanttUpper, public ganttService: GanttService) {
         // super();

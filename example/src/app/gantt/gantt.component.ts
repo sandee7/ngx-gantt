@@ -29,7 +29,8 @@ import { EventService } from '../services/event.service';
 
 @Component({
     selector: 'app-gantt-example',
-    templateUrl: './gantt.component.html'
+    templateUrl: './gantt.component.html',
+    styleUrls: ['./gantt.component.less']
     // providers: [GanttPrintService]
 })
 export class AppGanttExampleComponent implements OnInit, AfterViewInit {
@@ -68,6 +69,252 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
     groups: GanttGroup[] = [{ id: '000000', title: 'groupless' }];
     groupIds: string[] = [];
 
+    chartOptions: EChartsOption[] = [
+        {
+            xAxis: {
+                type: 'value'
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    data: [100, 400, 200, 500, 1200, 250, 300],
+                    type: 'pie',
+                    emphasis: {
+                        scale: true,
+                        scaleSize: 20
+                    }
+                }
+            ],
+            grid: {
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0
+            }
+        },
+        {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
+            },
+            legend: {
+                data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            grid: {
+                left: '0',
+                right: '0',
+                bottom: '0',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: 'Email',
+                    type: 'line',
+                    stack: 'Total',
+                    areaStyle: {},
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: [120, 132, 101, 134, 90, 230, 210]
+                },
+                {
+                    name: 'Union Ads',
+                    type: 'line',
+                    stack: 'Total',
+                    areaStyle: {},
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: [220, 182, 191, 234, 290, 330, 310]
+                },
+                {
+                    name: 'Video Ads',
+                    type: 'line',
+                    stack: 'Total',
+                    areaStyle: {},
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: [150, 232, 201, 154, 190, 330, 410]
+                },
+                {
+                    name: 'Direct',
+                    type: 'line',
+                    stack: 'Total',
+                    areaStyle: {},
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: [320, 332, 301, 334, 390, 330, 320]
+                },
+                {
+                    name: 'Search Engine',
+                    type: 'line',
+                    stack: 'Total',
+                    label: {
+                        show: true,
+                        position: 'top'
+                    },
+                    areaStyle: {},
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: [820, 932, 901, 934, 1290, 1330, 1320]
+                }
+            ]
+        },
+        {
+            polar: {
+                radius: [30, '80%']
+            },
+            angleAxis: {
+                max: 4,
+                startAngle: 75
+            },
+            radiusAxis: {
+                type: 'category',
+                data: ['a', 'b', 'c', 'd']
+            },
+            tooltip: {},
+            series: {
+                type: 'bar',
+                data: [2, 1.2, 2.4, 3.6],
+                coordinateSystem: 'polar',
+                label: {
+                    show: true,
+                    position: 'middle',
+                    formatter: '{b}: {c}'
+                }
+            }
+        },
+        {
+            backgroundColor: '#2c343c',
+            tooltip: {
+                trigger: 'item'
+            },
+            visualMap: {
+                show: false,
+                min: 80,
+                max: 600,
+                inRange: {
+                    colorLightness: [0, 1]
+                }
+            },
+            series: [
+                {
+                    name: 'Access From',
+                    type: 'pie',
+                    emphasis: {
+                        scale: true,
+                        scaleSize: 20
+                    },
+                    radius: '55%',
+                    center: ['50%', '50%'],
+                    data: [
+                        { value: 335, name: 'Direct' },
+                        { value: 310, name: 'Email' },
+                        { value: 274, name: 'Union Ads' },
+                        { value: 235, name: 'Video Ads' },
+                        { value: 400, name: 'Search Engine' }
+                    ].sort(function (a, b) {
+                        return a.value - b.value;
+                    }),
+                    roseType: 'radius',
+                    label: {
+                        color: 'rgba(255, 255, 255, 0.3)'
+                    },
+                    labelLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        },
+                        smooth: 0.2,
+                        length: 10,
+                        length2: 20
+                    },
+                    itemStyle: {
+                        color: '#c23531',
+                        shadowBlur: 200,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    },
+                    animationType: 'scale',
+                    animationEasing: 'elasticOut',
+                    animationDelay: function (idx) {
+                        return Math.random() * 200;
+                    }
+                }
+            ]
+        },
+        {
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c}'
+            },
+            legend: {
+                left: 'left'
+            },
+            xAxis: {
+                type: 'category',
+                name: 'x',
+                splitLine: { show: false },
+                data: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+            },
+            grid: {
+                left: '0',
+                right: '0',
+                bottom: '0',
+                containLabel: true
+            },
+            yAxis: {
+                type: 'log',
+                name: 'y',
+                minorSplitLine: {
+                    show: true
+                }
+            },
+            series: [
+                {
+                    name: 'Log2',
+                    type: 'line',
+                    data: [1, 3, 9, 27, 81, 247, 741, 2223, 6669]
+                },
+                {
+                    name: 'Log3',
+                    type: 'line',
+                    data: [1, 2, 4, 8, 16, 32, 64, 128, 256]
+                },
+                {
+                    name: 'Log1/2',
+                    type: 'line',
+                    data: [1 / 2, 1 / 4, 1 / 8, 1 / 16, 1 / 32, 1 / 64, 1 / 128, 1 / 256, 1 / 512]
+                }
+            ]
+        }
+    ];
+
     items: GanttItem[] = [
         {
             id: '000000',
@@ -89,7 +336,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.MODIFIED
+            state: State.MODIFIED,
+            options: {
+                echart: this.chartOptions[0]
+            }
         },
         {
             id: '000002',
@@ -100,7 +350,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.MODIFIED
+            state: State.MODIFIED,
+            options: {
+                echart: this.chartOptions[1]
+            }
         },
         {
             id: '000003',
@@ -111,7 +364,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.CREATED
+            state: State.CREATED,
+            options: {
+                echart: this.chartOptions[2]
+            }
         },
         {
             id: '000004',
@@ -121,7 +377,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.CREATED
+            state: State.CREATED,
+            options: {
+                echart: this.chartOptions[3]
+            }
         },
         {
             id: '000005',
@@ -132,7 +391,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.CREATED
+            state: State.CREATED,
+            options: {
+                echart: this.chartOptions[3]
+            }
         },
         {
             id: '000006',
@@ -142,7 +404,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.CREATED
+            state: State.CREATED,
+            options: {
+                echart: this.chartOptions[0]
+            }
         },
         {
             id: '000007',
@@ -152,7 +417,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.CREATED
+            state: State.CREATED,
+            options: {
+                echart: this.chartOptions[2]
+            }
         },
         {
             id: '000008',
@@ -162,7 +430,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.CREATED
+            state: State.CREATED,
+            options: {
+                echart: this.chartOptions[1]
+            }
         },
         {
             id: '000009',
@@ -172,7 +443,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.MODIFIED
+            state: State.MODIFIED,
+            options: {
+                echart: this.chartOptions[0]
+            }
         },
         {
             id: '0000010',
@@ -182,7 +456,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.CREATED
+            state: State.CREATED,
+            options: {
+                echart: this.chartOptions[0]
+            }
         },
         {
             id: '0000011',
@@ -192,7 +469,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.MODIFIED
+            state: State.MODIFIED,
+            options: {
+                echart: this.chartOptions[1]
+            }
         },
         {
             id: '0000012',
@@ -202,7 +482,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.MODIFIED
+            state: State.MODIFIED,
+            options: {
+                echart: this.chartOptions[1]
+            }
         },
         {
             id: '0000013',
@@ -212,7 +495,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.CREATED
+            state: State.CREATED,
+            options: {
+                echart: this.chartOptions[2]
+            }
         },
         {
             id: '0000014',
@@ -222,7 +508,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.CREATED
+            state: State.CREATED,
+            options: {
+                echart: this.chartOptions[3]
+            }
         },
         {
             id: '0000015',
@@ -232,7 +521,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.CREATED
+            state: State.CREATED,
+            options: {
+                echart: this.chartOptions[2]
+            }
         },
         {
             id: '00000115',
@@ -242,7 +534,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.DELETED
+            state: State.DELETED,
+            options: {
+                echart: this.chartOptions[1]
+            }
         },
         {
             id: '0000016',
@@ -252,7 +547,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.MODIFIED
+            state: State.MODIFIED,
+            options: {
+                echart: this.chartOptions[0]
+            }
         },
         {
             id: '0000017',
@@ -262,7 +560,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.MODIFIED
+            state: State.MODIFIED,
+            options: {
+                echart: this.chartOptions[3]
+            }
         },
         {
             id: '0000018',
@@ -272,7 +573,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.CREATED
+            state: State.CREATED,
+            options: {
+                echart: this.chartOptions[3]
+            }
         },
         {
             id: '0000019',
@@ -396,22 +700,6 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         dateFormat: {
             month: 'M'
         }
-    };
-
-    chartOption: EChartsOption = {
-        xAxis: {
-            type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            {
-                data: [820, 932, 901, 934, 1290, 1330, 1320],
-                type: 'pie'
-            }
-        ]
     };
 
     @HostBinding('class.gantt-example-component') class = true;
