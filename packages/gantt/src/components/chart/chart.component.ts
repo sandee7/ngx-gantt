@@ -34,11 +34,9 @@ export class ChartComponent {
     }
 
     setItemMap(items: GanttItemInternal[]) {
-        console.log(items);
         const map: Map<[Date, Date], GanttItemInternal[]> = new Map();
         let maxItemsSize = 0;
         items.map((item) => {
-            console.log(item);
             let counter = 0;
             for (let [key, value] of map) {
                 // If the two ranges are intersects each other
@@ -60,7 +58,6 @@ export class ChartComponent {
                 maxItemsSize = Math.max(maxItemsSize, 1);
             }
         });
-        console.log(maxItemsSize);
 
         return maxItemsSize;
     }

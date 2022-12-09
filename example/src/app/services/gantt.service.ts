@@ -48,7 +48,7 @@ export class GanttService {
             }
             if (counter === 0) {
                 map.set([new Date(item.start?.value), new Date(item.end?.value)], [item]);
-                maxItemY = Math.max(maxItemY, item.refs.y + ITEM_HEIGHT);
+                maxItemY = Math.max(maxItemY, item.refs.y + ITEM_HEIGHT + OFFSET);
             }
         });
 

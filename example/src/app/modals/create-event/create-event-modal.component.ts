@@ -18,7 +18,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 })
 export class CreateEventComponent implements OnInit {
     @Input() start: Date;
-    @Input() end: Date;
+    @Input() end?: Date;
     @Input() eventTypeName: string;
 
     eventTypes: EventType[];
@@ -64,9 +64,7 @@ export class CreateEventComponent implements OnInit {
             endTime: endDate,
             eventTypeName: this.eventTypeName
         });
-        if (this.eventTypeName) {
-            this.getVersionsByEventTypeName();
-        }
+        this.getVersionsByEventTypeName();
     }
 
     getVersionsByEventTypeName() {

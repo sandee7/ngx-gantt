@@ -19,7 +19,7 @@ export const sideMaxWidth = 600;
 
 export const sideMinWidth = 400;
 
-export const barBackground = '#348fe4';
+export const barBackground = '#a6d3ff6f';
 
 export const rangeHeight = 17;
 

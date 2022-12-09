@@ -2,18 +2,7 @@
  * <<licensetext>>
  */
 
-import {
-    AfterViewInit,
-    ChangeDetectorRef,
-    Component,
-    HostBinding,
-    HostListener,
-    OnInit,
-    OnChanges,
-    TemplateRef,
-    ViewChild,
-    SimpleChanges
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, HostBinding, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { EChartsOption } from 'echarts';
 import {
     GanttBarClickEvent,
@@ -29,12 +18,13 @@ import {
     GanttViewType,
     NgxGanttComponent
 } from 'ngx-gantt';
-import { BehaviorSubject, of, Subject } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { TEMPORARY_ITEM_COLOR } from '../constants/global-variables';
 import { random, randomItems } from '../helper';
 import { Event, EventType, State } from '../interfaces/event.interface';
 import { EventService } from '../services/event.service';
+import { ModalService } from '../services/modal.service';
 
 @Component({
     selector: 'app-gantt-example',
@@ -744,8 +734,8 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
 
     @HostListener('document:click', ['$event'])
     chartClick(event: PointerEvent) {
+        event.stopPropagation();
         if (this.isChartClicked && this.hoveredEchartTmplRef && this.hoveredEchartTmplRef.elementRef.nativeElement.contains(event.target)) {
-            event.stopPropagation();
         } else if (this.isChartClicked && this.hoveredEChart) {
             this.isChartClicked = false;
             this.hoveredEChart = null;
@@ -759,7 +749,11 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         return of(children).pipe(delay(1000));
     };
 
-    constructor(/*private printService: GanttPrintService*/ private cdr: ChangeDetectorRef, private eventService: EventService) {}
+    constructor(
+        /*private printService: GanttPrintService*/ private cdr: ChangeDetectorRef,
+        private eventService: EventService,
+        private modalService: ModalService
+    ) {}
 
     ngOnInit(): void {
         this.eventTypes = this.eventService.getEventTypes();
@@ -883,14 +877,18 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         }
     }
 
-    displayBiggerChart(chart: EChartsOption, clickEvent?: MouseEvent) {
-        if (clickEvent) {
-            this.isChartClicked = true;
-            this.hoveredEChart = chart;
-        } else if (!this.isChartClicked) {
+    displayBiggerChart(chart: EChartsOption) {
+        if (!this.isChartClicked) {
             this.hoveredEChart = chart;
         }
     }
+
+    openEchartModal(chart: EChartsOption) {
+        this.isChartClicked = true;
+        this.hoveredEChart = chart;
+        this.modalService.openEchart(chart);
+    }
+
     removeBiggerChart() {
         if (!this.isChartClicked) {
             this.hoveredEChart = null;

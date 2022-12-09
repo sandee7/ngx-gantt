@@ -37,11 +37,6 @@ export class GanttSelectedEvent<T = unknown> {
 }
 
 export class GanttMainClickEvent<T = unknown> {
-    event: PointerEvent;
-    group: GanttGroup<T>;
-}
-
-export class GanttMainMoveEvent<T = unknown> {
     event: MouseEvent;
     group: GanttGroup<T>;
 }

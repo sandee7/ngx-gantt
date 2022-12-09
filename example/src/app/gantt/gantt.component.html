@@ -39,7 +39,7 @@
 
   <ng-template #bar let-item="item" let-index>
     <div class="item-content-container">
-      <span style="color: #fff">&nbsp;&nbsp;{{ item.name }} </span>
+      <span style="color: rgb(0, 0, 0)">&nbsp;&nbsp;{{ item.name }} </span>
       <div
         *ngIf="item.options?.echart"
         echarts
@@ -47,7 +47,7 @@
         class="echart"
         (mouseover)="displayBiggerChart(item.options.echart)"
         (mouseout)="removeBiggerChart()"
-        (click)="displayBiggerChart(item.options.echart, $event)"
+        (click)="openEchartModal(item.options.echart)"
       ></div>
     </div>
   </ng-template>

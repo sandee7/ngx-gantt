@@ -4,10 +4,22 @@
 
 import { CommonModule } from '@angular/common';
 import { LOCALE_ID, NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { DocgeniTemplateModule } from '@docgeni/template';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { en_US, NZ_I18N } from 'ng-zorro-antd/i18n';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
+import { NgxEchartsModule } from 'ngx-echarts';
 import { NgxGanttModule } from 'ngx-gantt';
 import { ThyButtonModule } from 'ngx-tethys/button';
 import { ThyCheckboxModule } from 'ngx-tethys/checkbox';
@@ -25,24 +37,13 @@ import { AppGanttAdvancedExampleComponent } from './gantt-advanced/gantt-advance
 import { AppGanttGroupsExampleComponent } from './gantt-groups/gantt-groups.component';
 import { AppGanttRangeExampleComponent } from './gantt-range/gantt-range.component';
 import { AppGanttExampleComponent } from './gantt/gantt.component';
-import { GanttService } from './services/gantt.service';
+import { CreateEventComponent } from './modals/create-event/create-event-modal.component';
+import { EchartComponent } from './modals/echart/echart-modal.component';
 import { AsPipe } from './pipes/as.pipe';
-import { ModalService } from './services/modal.service';
-import { NzRadioModule } from 'ng-zorro-antd/radio';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzMessageModule } from 'ng-zorro-antd/message';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { CreateEventComponent } from './modals/create-event/update-category/create-event-modal.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FormService } from './services/form.service';
-import { en_US, NZ_I18N } from 'ng-zorro-antd/i18n';
-import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { EventService } from './services/event.service';
-import { NgxEchartsModule } from 'ngx-echarts';
+import { FormService } from './services/form.service';
+import { GanttService } from './services/gantt.service';
+import { ModalService } from './services/modal.service';
 
 const antdModule = [
     NzRadioModule,
@@ -65,7 +66,8 @@ const antdModule = [
         AppGanttRangeExampleComponent,
         AppGanttFlatComponent,
         AsPipe,
-        CreateEventComponent
+        CreateEventComponent,
+        EchartComponent
     ],
     imports: [
         ReactiveFormsModule,

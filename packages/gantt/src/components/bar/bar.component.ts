@@ -92,7 +92,6 @@ export class NgxGanttBarComponent extends GanttItemUpper implements OnInit, Afte
     }
 
     onBarClick(event: Event, item: any) {
-        console.log(item);
         this.barClick.emit({ event, item: this.item.origin });
     }
 

@@ -31,7 +31,7 @@ import { ModalService } from 'example/src/app/services/modal.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { from, fromEvent, Observable, Subject } from 'rxjs';
 import { finalize, startWith, take, takeUntil } from 'rxjs/operators';
-import { GanttItem, GanttItemInternal, GanttLineClickEvent, GanttMainClickEvent, GanttMainMoveEvent, GanttSelectedEvent } from './class';
+import { GanttItem, GanttItemInternal, GanttLineClickEvent, GanttMainClickEvent, GanttSelectedEvent } from './class';
 import { defaultColumnWidth } from './components/table/gantt-table.component';
 import { GANTT_ABSTRACT_TOKEN } from './gantt-abstract';
 import { GanttUpper, GANTT_UPPER_TOKEN } from './gantt-upper';
@@ -192,64 +192,39 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
         this.ganttRoot.scrollToDate(date);
     }
 
-    createEvent(event: GanttMainClickEvent) {
-        console.log(event);
-        if (!this.isChartClicked) {
+    startDragToCreate(event: GanttMainClickEvent) {
+        // If it was a left click
+        if (event.event.button === 0) {
             const clickedX = event.event.offsetX;
             const clickedDate = this.view.getDateByXPoint(clickedX);
             this.nzMessageService.info(`The clicked point is at: ${clickedDate.value}`);
-            this.modalService.createEventModal(
-                clickedDate.value,
-                (result) => {
-                    this.newEventCreation.emit({ event: result });
-                },
-                () => {
-                    console.log('Modal closed.');
-                }
-            );
+
+            const dragToSelectEvent = this.eventService.createEventFromDrag(clickedDate.value);
+            this.newEventCreation.emit({ event: dragToSelectEvent, groupId: event.group.id });
+
+            fromEvent(document, 'mousemove')
+                .pipe(takeUntil(fromEvent(document, 'mouseup')))
+                .subscribe((mouseMoveEvent: MouseEvent) => {
+                    const movedX = mouseMoveEvent.offsetX;
+                    const movedEvent = this.view.getDateByXPoint(movedX);
+                    dragToSelectEvent.endTime = movedEvent.value;
+                    this.newEventCreation.emit({ event: dragToSelectEvent, groupId: event.group.id });
+                })
+                .add(() => {
+                    this.modalService.createEventModal(
+                        dragToSelectEvent.startTime,
+                        (result) => {
+                            this.newEventCreation.emit({ event: result, deleteTemporaryEvent: true });
+                        },
+                        () => {
+                            this.newEventCreation.emit({ deleteTemporaryEvent: true });
+                            console.log('Modal closed.');
+                        },
+                        dragToSelectEvent.endTime,
+                        event.group.title
+                    );
+                });
         }
-    }
-
-    startDragToCreate(event: GanttMainMoveEvent) {
-        const clickedX = event.event.offsetX;
-        const clickedDate = this.view.getDateByXPoint(clickedX);
-
-        const dragToSelectEvent = this.eventService.createEventFromDrag(clickedDate.value);
-        this.newEventCreation.emit({ event: dragToSelectEvent, groupId: event.group.id });
-
-        fromEvent(document, 'mousemove')
-            .pipe(
-                finalize(() => {
-                    // delete dragToSelectEvent.meta.temporaryEvent;
-                    // this.queueEvents(
-                    //     new SchedulerCreateEvent(
-                    //         dragToSelectEvent,
-                    //         this.schedulerService.findNeighboringEvents(dragToSelectEvent, this.events)
-                    //     )
-                    // );
-                }),
-                takeUntil(fromEvent(document, 'mouseup'))
-            )
-            .subscribe((mouseMoveEvent: MouseEvent) => {
-                const movedX = mouseMoveEvent.offsetX;
-                const movedEvent = this.view.getDateByXPoint(movedX);
-                dragToSelectEvent.endTime = movedEvent.value;
-                this.newEventCreation.emit({ event: dragToSelectEvent, groupId: event.group.id });
-            })
-            .add(() => {
-                this.modalService.createEventModal(
-                    dragToSelectEvent.startTime,
-                    (result) => {
-                        this.newEventCreation.emit({ event: result, deleteTemporaryEvent: true });
-                    },
-                    () => {
-                        this.newEventCreation.emit({ deleteTemporaryEvent: true });
-                        console.log('Modal closed.');
-                    },
-                    dragToSelectEvent.endTime,
-                    event.group.title
-                );
-            });
     }
 
     modifyViewZoom() {
