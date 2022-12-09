@@ -4,7 +4,9 @@
 
 import { Injectable } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { Event, EventType } from '../interfaces/event.interface';
+import { addDays } from 'date-fns';
+import { GanttGroup, GanttItem } from 'ngx-gantt';
+import { Event, EventType, State } from '../interfaces/event.interface';
 
 export const productionLine1EventType: EventType = {
     timestamp: new Date(),
@@ -45,7 +47,37 @@ export class EventService {
         return eventTypes;
     }
 
-    createEvent(event: Event) {
-        console.log(event);
+    createEvent(event: Event, groups: GanttGroup[]) {
+        let item: GanttItem = event;
+        item.id = this.generateRandomNumber().toString();
+        const group = groups.find((group) => group.title === event.eventTypeName);
+        if (group) {
+            item.group_id = group.id;
+        } else {
+            item.group_id = groups[0].id;
+        }
+
+        return item;
+    }
+
+    createEventFromDrag(start: Date): Event {
+        return {
+            timestamp: new Date(),
+            id: this.generateRandomNumber().toString(),
+            name: '',
+            eventTypeName: '',
+            eventTypeVersion: 0,
+            startTime: start,
+            state: State.CREATED,
+            meta: {
+                temporaryEvent: true
+            }
+        };
+    }
+
+    generateRandomNumber() {
+        const min = 100000;
+        const max = 999999;
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 }

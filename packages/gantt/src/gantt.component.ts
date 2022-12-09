@@ -24,12 +24,14 @@ import {
     TemplateRef,
     ViewChild
 } from '@angular/core';
+import { Event } from 'example/src/app/interfaces/event.interface';
+import { EventService } from 'example/src/app/services/event.service';
 import { GanttService } from 'example/src/app/services/gantt.service';
 import { ModalService } from 'example/src/app/services/modal.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { from, Observable, Subject } from 'rxjs';
+import { from, fromEvent, Observable, Subject } from 'rxjs';
 import { finalize, startWith, take, takeUntil } from 'rxjs/operators';
-import { GanttItem, GanttItemInternal, GanttLineClickEvent, GanttSelectedEvent } from './class';
+import { GanttItem, GanttItemInternal, GanttLineClickEvent, GanttMainClickEvent, GanttMainMoveEvent, GanttSelectedEvent } from './class';
 import { defaultColumnWidth } from './components/table/gantt-table.component';
 import { GANTT_ABSTRACT_TOKEN } from './gantt-abstract';
 import { GanttUpper, GANTT_UPPER_TOKEN } from './gantt-upper';
@@ -73,7 +75,7 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
 
     @Output() selectedChange = new EventEmitter<GanttSelectedEvent>();
 
-    @Output() newEventCreation = new EventEmitter<any>();
+    @Output() newEventCreation = new EventEmitter<{ event?: Event; groupId?: string; deleteTemporaryEvent?: boolean }>();
 
     @ContentChild(NgxGanttTableComponent) table: NgxGanttTableComponent;
 
@@ -97,7 +99,8 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
         @Inject(GANTT_GLOBAL_CONFIG) config: GanttGlobalConfig,
         ganttService: GanttService,
         nzMessageService: NzMessageService,
-        private modalService: ModalService
+        private modalService: ModalService,
+        private eventService: EventService
     ) {
         super(elementRef, cdr, ngZone, config, ganttService, nzMessageService);
     }
@@ -189,21 +192,64 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
         this.ganttRoot.scrollToDate(date);
     }
 
-    createEvent(event: PointerEvent) {
+    createEvent(event: GanttMainClickEvent) {
+        console.log(event);
         if (!this.isChartClicked) {
-            const clickedX = event.offsetX;
+            const clickedX = event.event.offsetX;
             const clickedDate = this.view.getDateByXPoint(clickedX);
             this.nzMessageService.info(`The clicked point is at: ${clickedDate.value}`);
             this.modalService.createEventModal(
                 clickedDate.value,
                 (result) => {
-                    this.newEventCreation.emit(result);
+                    this.newEventCreation.emit({ event: result });
                 },
                 () => {
                     console.log('Modal closed.');
                 }
             );
         }
+    }
+
+    startDragToCreate(event: GanttMainMoveEvent) {
+        const clickedX = event.event.offsetX;
+        const clickedDate = this.view.getDateByXPoint(clickedX);
+
+        const dragToSelectEvent = this.eventService.createEventFromDrag(clickedDate.value);
+        this.newEventCreation.emit({ event: dragToSelectEvent, groupId: event.group.id });
+
+        fromEvent(document, 'mousemove')
+            .pipe(
+                finalize(() => {
+                    // delete dragToSelectEvent.meta.temporaryEvent;
+                    // this.queueEvents(
+                    //     new SchedulerCreateEvent(
+                    //         dragToSelectEvent,
+                    //         this.schedulerService.findNeighboringEvents(dragToSelectEvent, this.events)
+                    //     )
+                    // );
+                }),
+                takeUntil(fromEvent(document, 'mouseup'))
+            )
+            .subscribe((mouseMoveEvent: MouseEvent) => {
+                const movedX = mouseMoveEvent.offsetX;
+                const movedEvent = this.view.getDateByXPoint(movedX);
+                dragToSelectEvent.endTime = movedEvent.value;
+                this.newEventCreation.emit({ event: dragToSelectEvent, groupId: event.group.id });
+            })
+            .add(() => {
+                this.modalService.createEventModal(
+                    dragToSelectEvent.startTime,
+                    (result) => {
+                        this.newEventCreation.emit({ event: result, deleteTemporaryEvent: true });
+                    },
+                    () => {
+                        this.newEventCreation.emit({ deleteTemporaryEvent: true });
+                        console.log('Modal closed.');
+                    },
+                    dragToSelectEvent.endTime,
+                    event.group.title
+                );
+            });
     }
 
     modifyViewZoom() {

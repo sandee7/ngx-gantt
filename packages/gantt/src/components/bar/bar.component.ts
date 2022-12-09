@@ -18,6 +18,7 @@ import {
     ViewChild,
     ViewChildren
 } from '@angular/core';
+import { GanttService } from 'example/src/app/services/gantt.service';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { GanttBarClickEvent } from '../../class';
@@ -51,9 +52,10 @@ export class NgxGanttBarComponent extends GanttItemUpper implements OnInit, Afte
         private drag: GanttBarDrag,
         elementRef: ElementRef<HTMLDivElement>,
         @Inject(GANTT_UPPER_TOKEN) public override ganttUpper: GanttUpper,
-        private ngZone: NgZone
+        private ngZone: NgZone,
+        ganttService: GanttService
     ) {
-        super(elementRef, ganttUpper);
+        super(elementRef, ganttUpper, ganttService);
     }
 
     override ngOnInit() {

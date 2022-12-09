@@ -4,6 +4,7 @@
 
 import { QueryList } from '@angular/core';
 import { NgxGanttTableColumnComponent } from '../table/gantt-column.component';
+import { GanttGroup } from './group';
 import { GanttItem } from './item';
 
 export class GanttDragEvent<T = unknown> {
@@ -33,4 +34,14 @@ export class GanttBarClickEvent<T = unknown> {
 export class GanttSelectedEvent<T = unknown> {
     event: Event;
     selectedValue: GanttItem<T> | GanttItem<T>[];
+}
+
+export class GanttMainClickEvent<T = unknown> {
+    event: PointerEvent;
+    group: GanttGroup<T>;
+}
+
+export class GanttMainMoveEvent<T = unknown> {
+    event: MouseEvent;
+    group: GanttGroup<T>;
 }

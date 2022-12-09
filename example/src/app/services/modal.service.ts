@@ -13,13 +13,14 @@ import { CreateEventComponent } from '../modals/create-event/update-category/cre
 export class ModalService {
     constructor(private nzModal: NzModalService) {}
 
-    createEventModal(start: Date, successCallback: (event: Event) => void, cancelCallback: () => void, end?: Date) {
+    createEventModal(start: Date, successCallback: (event: Event) => void, cancelCallback: () => void, end?: Date, eventTypeName?: string) {
         const modal: any = this.nzModal.create({
             nzTitle: 'Create new event',
             nzContent: CreateEventComponent,
             nzComponentParams: {
                 start,
-                end
+                end,
+                eventTypeName
             },
             nzOnOk: () => successCallback(modal.getContentComponent().modal.result),
             nzOnCancel: () => cancelCallback(),

@@ -15,10 +15,13 @@ export interface Event {
     action?: string;
     eventTypeName: string;
     eventTypeVersion: number;
-    startTime: Date;
-    endTime: Date;
+    startTime?: Date;
+    endTime?: Date;
     state: State;
-    relations: Relation;
+    relations?: Relation;
+    meta?: {
+        temporaryEvent: boolean;
+    };
 }
 
 export enum State {

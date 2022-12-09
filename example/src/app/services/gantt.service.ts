@@ -5,12 +5,11 @@
 import { Injectable } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { GanttGroupInternal, GanttItemInternal } from 'ngx-gantt';
-import { ECHART_HEIGHT } from '../constants/global-variables';
+import { ECHART_HEIGHT, ITEM_HEIGHT, OFFSET } from '../constants/global-variables';
 
 @UntilDestroy()
 @Injectable()
 export class GanttService {
-    ITEM_HEIGHT = 45;
     public maxItemsSize: number[] = [];
 
     constructor() {}
@@ -49,7 +48,7 @@ export class GanttService {
             }
             if (counter === 0) {
                 map.set([new Date(item.start?.value), new Date(item.end?.value)], [item]);
-                maxItemY = Math.max(maxItemY, item.refs.y + this.ITEM_HEIGHT);
+                maxItemY = Math.max(maxItemY, item.refs.y + ITEM_HEIGHT);
             }
         });
 
@@ -76,7 +75,7 @@ export class GanttService {
             newEnd = Math.max(newEnd, value.end.value.getTime());
             value.refs.y = yDistance;
             // Add distance between the items
-            yDistance += this.ITEM_HEIGHT + (value.origin.options ? this.getHeightByOptions(value) : 0);
+            yDistance += ITEM_HEIGHT + (value.origin.options ? this.getHeightByOptions(value) : 0) + OFFSET;
         });
         const newKey: [Date, Date] = [new Date(newStart), new Date(newEnd)];
         map.set(newKey, values);

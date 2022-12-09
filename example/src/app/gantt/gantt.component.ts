@@ -31,6 +31,7 @@ import {
 } from 'ngx-gantt';
 import { BehaviorSubject, of, Subject } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { TEMPORARY_ITEM_COLOR } from '../constants/global-variables';
 import { random, randomItems } from '../helper';
 import { Event, EventType, State } from '../interfaces/event.interface';
 import { EventService } from '../services/event.service';
@@ -773,7 +774,7 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
     setGroups() {
         this.eventTypes.map((eventType) => {
             if (!this.groups.some((group) => group.title === eventType.name)) {
-                const id = this.generateRandomNumber().toString();
+                const id = this.eventService.generateRandomNumber().toString();
                 this.groups.push({ id, title: eventType.name });
                 this.groupIds.push(id);
             }
@@ -789,12 +790,6 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
                 item.group_id = this.groups[0].id;
             }
         });
-    }
-
-    generateRandomNumber() {
-        const min = 100000;
-        const max = 999999;
-        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     barClick(event: GanttBarClickEvent) {
@@ -853,22 +848,47 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         this.refreshItems.next(true);
     }
 
-    createEvent(event: Event) {
-        let item: GanttItem = event;
-        item.id = this.generateRandomNumber().toString();
-        const group = this.groups.find((group) => group.title === event.eventTypeName);
-        if (group) {
-            item.group_id = group.id;
+    createEvent(event: { event?: Event; groupId?: string; deleteTemporaryEvent?: boolean }) {
+        let item: GanttItem;
+        if (event.event?.meta?.temporaryEvent) {
+            const alreadyStartedDraggedEvent = this.items.find((item) => item.id === event.event.id);
+            if (alreadyStartedDraggedEvent) {
+                alreadyStartedDraggedEvent.end = event.event.endTime.getTime();
+                this.items = [...this.items];
+            } else {
+                const group = this.groups.find((group) => group.id === event.groupId);
+                item = event.event;
+                item.start = event.event.startTime.getTime();
+                item.group_id = group.id;
+                item.color = TEMPORARY_ITEM_COLOR;
+                this.items = [item, ...this.items];
+            }
         } else {
-            item.group_id = this.groups[0].id;
+            if (event.deleteTemporaryEvent) {
+                this.deleteTemporaryEvent();
+            }
+            if (event.event) {
+                item = this.eventService.createEvent(event.event, this.groups);
+                this.items = [item, ...this.items];
+            }
         }
-        this.items = [item, ...this.items];
+    }
+
+    // Delete temporary event on modal close
+    deleteTemporaryEvent() {
+        const index = this.items.findIndex((item) => item.meta.temporaryEvent === true);
+        if (index > -1) {
+            this.items.splice(index, 1);
+            this.items = [...this.items];
+        }
     }
 
     displayBiggerChart(chart: EChartsOption, clickEvent?: MouseEvent) {
-        this.hoveredEChart = chart;
         if (clickEvent) {
             this.isChartClicked = true;
+            this.hoveredEChart = chart;
+        } else if (!this.isChartClicked) {
+            this.hoveredEChart = chart;
         }
     }
     removeBiggerChart() {

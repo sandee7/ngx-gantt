@@ -4,8 +4,17 @@
 
 import { Component, EventEmitter, HostBinding, Inject, Input, OnChanges, OnInit, Output, TemplateRef } from '@angular/core';
 import { EChartsOption } from 'echarts';
+import { ITEM_HEIGHT } from 'example/src/app/constants/global-variables';
 import { GanttService } from 'example/src/app/services/gantt.service';
-import { GanttBarClickEvent, GanttGroupInternal, GanttItemInternal } from '../../class';
+import { finalize, fromEvent } from 'rxjs';
+import {
+    GanttBarClickEvent,
+    GanttGroup,
+    GanttGroupInternal,
+    GanttItemInternal,
+    GanttMainClickEvent,
+    GanttMainMoveEvent
+} from '../../class';
 import { GanttUpper, GANTT_UPPER_TOKEN } from '../../gantt-upper';
 
 @Component({
@@ -25,9 +34,13 @@ export class GanttMainComponent implements OnInit, OnChanges {
 
     @Input() rangeTemplate: TemplateRef<any>;
 
+    @Input() dragCreationInProgress: boolean = false;
+
     @Output() _barClick = new EventEmitter<GanttBarClickEvent>();
 
-    @Output() newEventClick = new EventEmitter<Event>();
+    @Output() newEventClick = new EventEmitter<GanttMainClickEvent>();
+
+    @Output() newEventMouseMove = new EventEmitter<GanttMainMoveEvent>();
 
     // @Output() override lineClick = new EventEmitter<GanttLineClickEvent>();
 
@@ -62,5 +75,11 @@ export class GanttMainComponent implements OnInit, OnChanges {
 
     trackBy(index: number, item: GanttGroupInternal | GanttItemInternal) {
         return item.id || index;
+    }
+
+    createClickEvent($event: PointerEvent, group: GanttGroup) {
+        if (!this.dragCreationInProgress) {
+            this.newEventClick.emit({ event: $event, group });
+        }
     }
 }

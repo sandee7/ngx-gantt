@@ -35,6 +35,9 @@ export interface GanttItem<T = unknown> {
     // todo remove optionality
     relations?: Relation;
     options?: Options;
+    meta?: {
+        temporaryEvent: boolean;
+    };
     // End of Event type things
     group_id?: string;
     draggable?: boolean;

@@ -19,6 +19,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 export class CreateEventComponent implements OnInit {
     @Input() start: Date;
     @Input() end: Date;
+    @Input() eventTypeName: string;
 
     eventTypes: EventType[];
     eventTypeNames: string[];
@@ -49,14 +50,23 @@ export class CreateEventComponent implements OnInit {
      */
     ngOnInit(): void {
         this.eventForm = this.formService.eventFormGroup();
-        this.setInitialValues();
         this.eventTypes = this.eventService.getEventTypes();
         this.eventTypeNames = [...new Set(this.eventTypes.map((eventType) => eventType.name))];
+        this.setInitialValues();
     }
 
     setInitialValues() {
-        const endDate = addDays(this.start, 7);
-        this.eventForm.patchValue({ startDate: this.start, startTime: this.start, endDate, endTime: endDate });
+        const endDate = this.end ? this.end : addDays(this.start, 7);
+        this.eventForm.patchValue({
+            startDate: this.start,
+            startTime: this.start,
+            endDate,
+            endTime: endDate,
+            eventTypeName: this.eventTypeName
+        });
+        if (this.eventTypeName) {
+            this.getVersionsByEventTypeName();
+        }
     }
 
     getVersionsByEventTypeName() {

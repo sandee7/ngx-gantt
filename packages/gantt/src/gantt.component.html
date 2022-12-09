@@ -26,6 +26,7 @@
       (barClick)="barClick.emit($event)"
       (lineClick)="lineClick.emit($event)"
       (newEventClick)="createEvent($event)"
+      (newEventMouseMove)="startDragToCreate($event)"
     >
     </gantt-main>
   </ng-template>

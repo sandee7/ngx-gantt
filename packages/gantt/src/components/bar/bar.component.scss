@@ -6,8 +6,8 @@
 @use '../../styles/variables';
 
 $gantt-bar-layer-append-width: 32px;
-$gantt-bar-layer-append-height: 42px;
-$gantt-bar-link-height: 16px;
+$gantt-bar-layer-append-height: 40px;
+$gantt-bar-link-height: 14px;
 $gantt-bar-link-handle-size: 16px;
 $gantt-bar-link-drop-border: 5px;
 
@@ -58,7 +58,7 @@ $gantt-bar-link-drop-border: 5px;
     height: calc(100% - #{$gantt-bar-link-height} * 2);
     position: absolute;
     border-radius: 4px;
-    top: $gantt-bar-link-height;
+    top: calc($gantt-bar-link-height + 1px);
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15);
 
     .handle {
