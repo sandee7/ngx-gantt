@@ -40,7 +40,7 @@ export const firstGroupEventType: EventType = {
     relationsMap: new Map()
 };
 
-export const eventTypes: EventType[] = [productionLine1EventType, productionLine2EventType, meetingEventType, firstGroupEventType];
+export const eventTypes: EventType[] = [firstGroupEventType, productionLine1EventType, productionLine2EventType, meetingEventType];
 
 @UntilDestroy()
 @Injectable()

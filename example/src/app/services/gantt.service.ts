@@ -32,11 +32,11 @@ export class GanttService {
             let counter = 0;
             for (let [key, value] of map) {
                 // If the two ranges are intersects each other
-                if (key[1] >= item.start?.value && key[0] <= item.end?.value) {
+                if (key[1] >= item.start?.value && (key[0] <= item.end?.value || !item.end.value)) {
                     counter++;
                     value.push(item);
-                    const newStart = Math.min(key[0].getTime(), item.start?.value.getTime());
-                    const newEnd = Math.max(key[1].getTime(), item.end?.value.getTime());
+                    const newStart = item.start ? Math.min(key[0].getTime(), item.start?.value.getTime()) : key[0].getTime();
+                    const newEnd = item.end ? Math.max(key[1].getTime(), item.end?.value.getTime()) : key[1].getTime();
                     const newKey: [Date, Date] = [new Date(newStart), new Date(newEnd)];
                     map.set(newKey, value);
                     map.delete(key);
@@ -48,7 +48,10 @@ export class GanttService {
             }
             if (counter === 0) {
                 map.set([new Date(item.start?.value), new Date(item.end?.value)], [item]);
-                maxItemY = Math.max(maxItemY, item.refs.y + ITEM_HEIGHT + OFFSET / 2);
+                maxItemY = Math.max(
+                    maxItemY,
+                    item.refs.y + ITEM_HEIGHT + (item.origin.options ? this.getHeightByOptions(item) : 0) + OFFSET / 2
+                );
             }
         });
 
