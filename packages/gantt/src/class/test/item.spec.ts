@@ -23,8 +23,7 @@ describe('GanttItemInternal', () => {
                     title: 'VERSION Children 0101',
                     start: new GanttDate('2020-05-21 12:34:35').getUnixTime(),
                     group_id: '00001',
-                    color: '#FF0000',
-                    linkable: false
+                    color: '#FF0000'
                 }
             ]
         };
@@ -78,16 +77,14 @@ describe('GanttItemInternal', () => {
                 title: 'VERSION Children 0102',
                 start: new GanttDate('2020-05-21 12:34:35').getUnixTime(),
                 group_id: '00001',
-                color: '#FF0000',
-                linkable: false
+                color: '#FF0000'
             },
             {
                 id: 'item-child-0103',
                 title: 'VERSION Children 0103',
                 start: new GanttDate('2020-06-21 12:34:35').getUnixTime(),
                 group_id: '00001',
-                color: '#FF0000',
-                linkable: false
+                color: '#FF0000'
             }
         ];
         ganttItemInternal.addChildren(items);

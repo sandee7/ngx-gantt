@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import { CommonModule } from '@angular/common';
 import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -21,7 +25,6 @@ const mockRangeItems = [
                 title: 'VERSION Children 0101',
                 start: new GanttDate('2020-05-21 12:34:35').getUnixTime(),
                 color: '#FF0000',
-                linkable: false,
                 type: 'range'
             }
         ]

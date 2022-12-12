@@ -7,58 +7,16 @@
 
 $gantt-bar-layer-append-width: 32px;
 $gantt-bar-layer-append-height: 40px;
-$gantt-bar-link-height: 14px;
-$gantt-bar-link-handle-size: 16px;
-$gantt-bar-link-drop-border: 5px;
-
-@mixin link-handles {
-  .link-handles {
-    .handle {
-      position: absolute;
-      display: inline-block;
-      cursor: pointer;
-      width: $gantt-bar-link-height;
-      height: $gantt-bar-link-height;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1001;
-
-      &:first-child {
-        left: 0;
-        top: 0;
-      }
-
-      &:last-child {
-        right: 0;
-        bottom: 0;
-      }
-
-      .point {
-        color: #a6d3ff6f;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: #a6d3ff6f;
-        transition: 0.3 ease;
-
-        &:hover {
-          width: 12px;
-          height: 12px;
-        }
-      }
-    }
-  }
-}
 
 @mixin drag-handles {
   .drag-handles {
     background: variables.$gantt-bar-layer-bg;
     width: 100%;
-    height: calc(100% - #{$gantt-bar-link-height} * 2);
+    height: 100%;
+    height: calc(100% - 20px);
     position: absolute;
     border-radius: 4px;
-    top: calc($gantt-bar-link-height + 1px);
+    top: calc(10px + 1px);
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15);
 
     .handle {
@@ -127,16 +85,15 @@ $gantt-bar-link-drop-border: 5px;
     top: math.div($gantt-bar-layer-append-height, 2) * -1;
     display: none;
     @include drag-handles();
-    @include link-handles();
   }
 
   .gantt-bar-border {
-    width: calc(100% + #{$gantt-bar-link-drop-border} * 2);
-    height: calc(100% + #{$gantt-bar-link-drop-border} * 2);
+    width: calc(100% + 10px);
+    height: calc(100% + 20px);
     position: absolute;
     border-radius: 4px;
-    left: $gantt-bar-link-drop-border * -1;
-    top: $gantt-bar-link-drop-border * -1;
+    left: -10px;
+    top: -10px;
     display: none;
     background: #fff;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
@@ -172,34 +129,6 @@ $gantt-bar-link-drop-border: 5px;
 
     .gantt-bar-content {
       box-shadow: none;
-    }
-  }
-
-  &-drop-active {
-    @include active-bar();
-
-    .gantt-bar-layer {
-      .link-handles {
-        .handle {
-          width: $gantt-bar-link-handle-size + 10px;
-          height: 100%;
-
-          &:first-child {
-            left: -$gantt-bar-link-handle-size - 5px;
-          }
-
-          &:last-child {
-            right: -$gantt-bar-link-handle-size - 5px;
-          }
-
-          &:hover {
-            .point {
-              width: 12px;
-              height: 12px;
-            }
-          }
-        }
-      }
     }
   }
 }

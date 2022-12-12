@@ -63,8 +63,6 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
 
     @Input() childrenResolve: (GanttItem) => Observable<GanttItem[]>;
 
-    @Input() override linkable: boolean;
-
     @Input() refreshItems: Observable<boolean>;
 
     @Input() zoomIndex: number;
@@ -111,7 +109,7 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
         // the `onStable` will never emit any value.
         const onStable$ = this.ngZone.isStable ? from(Promise.resolve()) : this.ngZone.onStable.pipe(take(1));
         this.refreshItems.pipe(takeUntil(this.unsubscribe$)).subscribe((loadOnScrollEmitted) => {
-            this.refreshItemsByChild$.next(loadOnScrollEmitted);
+            this.refreshItemsByScroll$.next(loadOnScrollEmitted);
         });
     }
 
@@ -209,8 +207,10 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
                     const movedEvent = this.view.getDateByXPoint(movedX);
                     dragToSelectEvent.endTime = movedEvent.value;
                     this.newEventCreation.emit({ event: dragToSelectEvent, groupId: event.group.id });
+                    this.scrollToTemporaryEvent();
                 })
                 .add(() => {
+                    this.scrollToTemporaryEvent();
                     this.modalService.createEventModal(
                         dragToSelectEvent.startTime,
                         (result) => {
@@ -225,6 +225,20 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
                     );
                 });
         }
+    }
+
+    scrollToTemporaryEvent() {
+        const element = document.getElementById('temporaryEvent');
+        if (element && !this.checkElementIsInView(element)) {
+            // todo: scroll with offset
+            element.scrollIntoView();
+        }
+    }
+
+    checkElementIsInView(element: Element) {
+        let rect = element.getBoundingClientRect();
+        let viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+        return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
     }
 
     modifyViewZoom() {

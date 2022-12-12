@@ -27,6 +27,7 @@
   (lineClick)="lineClick($event)"
   (dragMoved)="dragMoved($event)"
   (dragEnded)="dragEnded($event)"
+  (loadEnded)="loadEnded($event)"
   (selectedChange)="selectedChange($event)"
   (loadOnScroll)="loadOnScroll($event)"
   (newEventCreation)="createEvent($event)"
@@ -45,12 +46,8 @@
         echarts
         [options]="item.options?.echart"
         class="echart"
-        (mouseover)="displayBiggerChart(item.options.echart)"
-        (mouseout)="removeBiggerChart()"
         (click)="openEchartModal(item.options.echart)"
       ></div>
     </div>
   </ng-template>
 </ngx-gantt>
-
-<div *ngIf="hoveredEChart" echarts [options]="hoveredEChart" class="hovered-echart" id="hoveredEchart"></div>

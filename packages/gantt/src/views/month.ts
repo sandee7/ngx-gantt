@@ -9,7 +9,7 @@ import { GanttDatePoint } from '../class/date-point';
 const viewOptions: GanttViewOptions = {
     start: new GanttDate().startOfQuarter().addQuarters(-1),
     end: new GanttDate().endOfQuarter().addQuarters(2),
-    cellWidth: 280,
+    cellWidth: 500,
     addAmount: 1,
     addUnit: 'quarter'
 };

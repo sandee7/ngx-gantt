@@ -58,8 +58,7 @@ export class AppGanttRangeExampleComponent implements OnInit {
                 id: new Date().getTime(),
                 title: new Date().getTime(),
                 start: Math.floor(new Date().getTime() / 1000),
-                draggable: true,
-                linkable: false
+                draggable: true
             }
         ]).pipe(delay(1000));
     }

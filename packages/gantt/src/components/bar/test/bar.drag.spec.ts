@@ -66,8 +66,6 @@ export class TestGanttBarComponent {
 
     draggable = true;
 
-    linkable = true;
-
     dragEnded(event: GanttDragEvent) {
         console.log(event);
     }

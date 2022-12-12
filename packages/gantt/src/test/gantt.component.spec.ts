@@ -1,3 +1,7 @@
+/*
+ * <<licensetext>>
+ */
+
 import { GanttBaselineItem, GanttBaselineItemInternal } from './../class/baseline';
 import { GanttGroupInternal } from './../class/group';
 import { GanttItemInternal } from './../class/item';
@@ -157,8 +161,7 @@ export class TestGanttLoadChildrenComponent {
                 id: new Date().getTime(),
                 title: new Date().getTime(),
                 start: Math.floor(new Date().getTime() / 1000),
-                draggable: true,
-                linkable: false
+                draggable: true
             }
         ]).pipe(delay(1000));
     }

@@ -7,7 +7,7 @@ import { GanttDate, eachWeekOfInterval, eachDayOfInterval } from '../utils/date'
 import { GanttDatePoint } from '../class/date-point';
 
 const viewOptions: GanttViewOptions = {
-    cellWidth: 35,
+    cellWidth: 125,
     start: new GanttDate().startOfYear().startOfWeek({ weekStartsOn: 1 }),
     end: new GanttDate().endOfYear().endOfWeek({ weekStartsOn: 1 }),
     addAmount: 1,

@@ -67,7 +67,7 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
     isBaselineChecked = false;
 
     eventTypes: EventType[] = [];
-    groups: GanttGroup[] = [{ id: '000000', title: 'groupless' }];
+    groups: GanttGroup[] = [];
     groupIds: string[] = [];
 
     hoveredEChart: EChartsOption;
@@ -326,7 +326,7 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             end: 1628421197,
             expandable: true,
             group_id: '',
-            eventTypeName: '',
+            eventTypeName: 'First group',
             eventTypeVersion: 1,
             state: State.MODIFIED
         },
@@ -749,11 +749,7 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         return of(children).pipe(delay(1000));
     };
 
-    constructor(
-        /*private printService: GanttPrintService*/ private cdr: ChangeDetectorRef,
-        private eventService: EventService,
-        private modalService: ModalService
-    ) {}
+    constructor(private cdr: ChangeDetectorRef, private eventService: EventService, private modalService: ModalService) {}
 
     ngOnInit(): void {
         this.eventTypes = this.eventService.getEventTypes();
@@ -799,6 +795,10 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
     dragEnded(event: GanttDragEvent) {
         // this.thyNotify.info('Event: dragEnded', `修改了 [${event.item.name}] 的时间`);
         this.items = [...this.items];
+    }
+
+    loadEnded(event: Event) {
+        // this.items = [...this.items];
     }
 
     selectedChange(event: GanttSelectedEvent) {
@@ -855,6 +855,9 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
                 item.start = event.event.startTime.getTime();
                 item.group_id = group.id;
                 item.color = TEMPORARY_ITEM_COLOR;
+                item.options = {
+                    echart: this.chartOptions[3]
+                };
                 this.items = [item, ...this.items];
             }
         } else {
@@ -863,6 +866,9 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             }
             if (event.event) {
                 item = this.eventService.createEvent(event.event, this.groups);
+                item.options = {
+                    echart: this.chartOptions[3]
+                };
                 this.items = [item, ...this.items];
             }
         }
@@ -877,21 +883,9 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         }
     }
 
-    displayBiggerChart(chart: EChartsOption) {
-        if (!this.isChartClicked) {
-            this.hoveredEChart = chart;
-        }
-    }
-
     openEchartModal(chart: EChartsOption) {
         this.isChartClicked = true;
         this.hoveredEChart = chart;
         this.modalService.openEchart(chart);
-    }
-
-    removeBiggerChart() {
-        if (!this.isChartClicked) {
-            this.hoveredEChart = null;
-        }
     }
 }

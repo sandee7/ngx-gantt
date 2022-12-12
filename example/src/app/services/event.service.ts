@@ -32,7 +32,15 @@ export const meetingEventType: EventType = {
     relationsMap: new Map(Object.entries({ roomId: 2, floorId: 5 }))
 };
 
-export const eventTypes: EventType[] = [productionLine1EventType, productionLine2EventType, meetingEventType];
+export const firstGroupEventType: EventType = {
+    timestamp: new Date(),
+    name: 'First group',
+    version: 1,
+    actions: ['playing', 'sleeping', 'doing some exercise'],
+    relationsMap: new Map()
+};
+
+export const eventTypes: EventType[] = [productionLine1EventType, productionLine2EventType, meetingEventType, firstGroupEventType];
 
 @UntilDestroy()
 @Injectable()

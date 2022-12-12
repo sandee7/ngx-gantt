@@ -18,7 +18,6 @@ export const mockItems = [
                 start: 1590035675,
                 group_id: '00001',
                 color: '#FF0000',
-                linkable: false,
                 progress: 0.5,
                 barStyle: { border: `1px solid #FF0000` }
             }

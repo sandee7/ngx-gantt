@@ -43,7 +43,6 @@ module.exports = [
             },
 
             {
-                name: 'linkable',
                 description: `设置是否可连接关联关系`,
                 type: 'boolean',
                 default: 'false'

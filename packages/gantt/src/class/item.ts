@@ -41,7 +41,6 @@ export interface GanttItem<T = unknown> {
     // End of Event type things
     group_id?: string;
     draggable?: boolean;
-    linkable?: boolean;
     expandable?: boolean;
     expanded?: boolean;
     children?: GanttItem[];
@@ -71,7 +70,6 @@ export class GanttItemInternal {
     color?: string;
     barStyle?: Partial<CSSStyleDeclaration>;
     draggable?: boolean;
-    linkable?: boolean;
     origin: GanttItem;
     expandable?: boolean;
     expanded?: boolean;
@@ -92,7 +90,6 @@ export class GanttItemInternal {
         this.id = this.origin.id;
         this.color = this.origin.color;
         this.barStyle = this.origin.barStyle;
-        this.linkable = this.origin.linkable === undefined ? true : this.origin.linkable;
         this.draggable = this.origin.draggable === undefined ? true : this.origin.draggable;
         this.expandable = this.origin.expandable || (this.origin.children || []).length > 0;
         this.expanded = this.origin.expanded === undefined ? false : this.origin.expanded;

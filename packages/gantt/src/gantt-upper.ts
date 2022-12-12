@@ -58,8 +58,7 @@ export abstract class GanttUpper implements OnChanges, OnInit, OnDestroy {
 
     // eslint-disable-next-line @angular-eslint/no-input-rename
 
-    public refreshItemsByChild$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    // @Input('refreshItemsByChild') refreshItemsByChild: boolean;
+    public refreshItemsByScroll$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     @Input() viewType: GanttViewType = GanttViewType.month;
 
@@ -111,6 +110,8 @@ export abstract class GanttUpper implements OnChanges, OnInit, OnDestroy {
 
     @Output() dragEnded = new EventEmitter<GanttDragEvent>();
 
+    @Output() loadEnded = new EventEmitter<Event>();
+
     @Output() barClick = new EventEmitter<GanttBarClickEvent>();
 
     @Output() newEventClick = new EventEmitter<Event>();
@@ -124,8 +125,6 @@ export abstract class GanttUpper implements OnChanges, OnInit, OnDestroy {
     @ContentChild('group', { static: true }) groupTemplate: TemplateRef<any>;
 
     @ContentChild('groupHeader', { static: true }) groupHeaderTemplate: TemplateRef<any>;
-
-    public linkable: boolean;
 
     public view: GanttView;
 
@@ -326,9 +325,10 @@ export abstract class GanttUpper implements OnChanges, OnInit, OnDestroy {
         this.view.start$.pipe(skip(1), takeUntil(this.unsubscribe$)).subscribe(() => {
             this.computeRefs();
         });
-        this.refreshItemsByChild$.pipe(takeUntil(this.unsubscribe$)).subscribe((refresh) => {
+        this.refreshItemsByScroll$.pipe(takeUntil(this.unsubscribe$)).subscribe((refresh) => {
             if (refresh) {
                 this.computeRefs();
+                this.loadEnded.emit();
             }
         });
     }
