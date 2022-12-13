@@ -855,9 +855,6 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
                 item.start = event.event.startTime.getTime();
                 item.group_id = group.id;
                 item.color = TEMPORARY_ITEM_COLOR;
-                item.options = {
-                    echart: this.chartOptions[3]
-                };
                 this.items = [item, ...this.items];
             }
         } else {

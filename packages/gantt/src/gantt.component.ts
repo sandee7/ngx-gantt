@@ -199,6 +199,7 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
 
             const dragToSelectEvent = this.eventService.createEventFromDrag(clickedDate.value);
             this.newEventCreation.emit({ event: dragToSelectEvent, groupId: event.group.id });
+            let scrolled = false;
 
             fromEvent(document, 'mousemove')
                 .pipe(takeUntil(fromEvent(document, 'mouseup')))
@@ -207,10 +208,12 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
                     const movedEvent = this.view.getDateByXPoint(movedX);
                     dragToSelectEvent.endTime = movedEvent.value;
                     this.newEventCreation.emit({ event: dragToSelectEvent, groupId: event.group.id });
-                    this.scrollToTemporaryEvent();
+                    if (!scrolled) {
+                        this.scrollToTemporaryEvent();
+                        scrolled = true;
+                    }
                 })
                 .add(() => {
-                    this.scrollToTemporaryEvent();
                     this.modalService.createEventModal(
                         dragToSelectEvent.startTime,
                         (result) => {
@@ -229,16 +232,12 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
 
     scrollToTemporaryEvent() {
         const element = document.getElementById('temporaryEvent');
-        if (element && !this.checkElementIsInView(element)) {
-            // todo: scroll with offset
-            element.scrollIntoView();
+        const scrollContainer = document.getElementById('dg-scroll-container');
+        if (element && scrollContainer) {
+            const rect = element.getBoundingClientRect();
+            const elementTop = Math.floor(rect.top + scrollContainer.scrollTop - 150 - scrollContainer.clientHeight / 8);
+            scrollContainer.scrollTo({ top: elementTop });
         }
-    }
-
-    checkElementIsInView(element: Element) {
-        let rect = element.getBoundingClientRect();
-        let viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-        return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
     }
 
     modifyViewZoom() {
