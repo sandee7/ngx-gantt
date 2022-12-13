@@ -39,8 +39,6 @@ function linearGradient(sideOrCorner: string, color: string, stop: string) {
     providers: [GanttBarDrag]
 })
 export class NgxGanttBarComponent extends GanttItemUpper implements OnInit, AfterViewInit, OnChanges, OnDestroy {
-    @Output() barClick = new EventEmitter<GanttBarClickEvent>();
-
     @ViewChild('content') contentElementRef: ElementRef<HTMLDivElement>;
 
     @HostBinding('class.gantt-bar') ganttItemClass = true;
@@ -89,10 +87,6 @@ export class NgxGanttBarComponent extends GanttItemUpper implements OnInit, Afte
             .subscribe((event) => {
                 event.stopPropagation();
             });
-    }
-
-    onBarClick(event: Event, item: any) {
-        this.barClick.emit({ event, item: this.item.origin });
     }
 
     private setContentBackground() {

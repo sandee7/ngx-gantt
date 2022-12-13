@@ -2,10 +2,9 @@
  * <<licensetext>>
  */
 
-import { AfterViewInit, ChangeDetectorRef, Component, HostBinding, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, HostBinding, HostListener, OnInit, ViewChild } from '@angular/core';
 import { EChartsOption } from 'echarts';
 import {
-    GanttBarClickEvent,
     GanttBaselineItem,
     GanttDate,
     GanttDragEvent,
@@ -22,7 +21,7 @@ import { of, Subject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { TEMPORARY_ITEM_COLOR } from '../constants/global-variables';
 import { random, randomItems } from '../helper';
-import { Event, EventType, State } from '../interfaces/event.interface';
+import { EventType, State } from '../interfaces/event.interface';
 import { EventService } from '../services/event.service';
 import { ModalService } from '../services/modal.service';
 
@@ -35,8 +34,6 @@ import { ModalService } from '../services/modal.service';
 export class AppGanttExampleComponent implements OnInit, AfterViewInit {
     @ViewChild('gantt')
     gantt!: NgxGanttComponent;
-
-    @ViewChild('hoveredEchart') hoveredEchartTmplRef: TemplateRef<any>;
 
     refreshItems: Subject<boolean> = new Subject<boolean>();
 
@@ -70,7 +67,6 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
     groups: GanttGroup[] = [];
     groupIds: string[] = [];
 
-    hoveredEChart: EChartsOption;
     isChartClicked: boolean = false;
     chartOptions: EChartsOption[] = [
         {
@@ -563,7 +559,8 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             group_id: '',
             eventTypeName: 'Production Line',
             eventTypeVersion: 1,
-            state: State.MODIFIED,
+            action: '',
+            state: State.CREATED,
             options: {
                 echart: this.chartOptions[3]
             }
@@ -692,6 +689,7 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
             state: State.CREATED
         }
     ];
+    clickedBar: GanttItem;
 
     baselineItems: GanttBaselineItem[] = [];
 
@@ -729,16 +727,6 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
                 }
             }
             this.cdr.detectChanges();
-        }
-    }
-
-    @HostListener('document:click', ['$event'])
-    chartClick(event: PointerEvent) {
-        event.stopPropagation();
-        if (this.isChartClicked && this.hoveredEchartTmplRef && this.hoveredEchartTmplRef.elementRef.nativeElement.contains(event.target)) {
-        } else if (this.isChartClicked && this.hoveredEChart) {
-            this.isChartClicked = false;
-            this.hoveredEChart = null;
         }
     }
 
@@ -782,18 +770,17 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         });
     }
 
-    barClick(event: GanttBarClickEvent) {
-        // this.thyNotify.info('Event: barClick', `你点击了 [${event.item.name}]`);
+    barTitleClick(item: GanttItem) {
+        // Deep copy is because the GanttComponent's @Input does not change. So if the user opens the 'modify' modal then closes it and he would
+        // like to open it again, we have to be sure he could open it again.
+        this.clickedBar = JSON.parse(JSON.stringify(item));
     }
 
-    lineClick(event: GanttLineClickEvent) {
-        // this.thyNotify.info('Event: lineClick', `你点击了 ${event.source.title} 到 ${event.target.title} 的关联线`);
-    }
+    lineClick(event: GanttLineClickEvent) {}
 
     dragMoved(event: GanttDragEvent) {}
 
     dragEnded(event: GanttDragEvent) {
-        // this.thyNotify.info('Event: dragEnded', `修改了 [${event.item.name}] 的时间`);
         this.items = [...this.items];
     }
 
@@ -801,12 +788,7 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         // this.items = [...this.items];
     }
 
-    selectedChange(event: GanttSelectedEvent) {
-        // this.thyNotify.info(
-        //     'Event: selectedChange',
-        //     `当前选中的 item 的 id 为 ${(event.selectedValue as GanttItem[]).map((item) => item.id).join('、')}`
-        // );
-    }
+    selectedChange(event: GanttSelectedEvent) {}
 
     // print(name: string) {
     //     this.printService.print(name);
@@ -842,17 +824,17 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         this.refreshItems.next(true);
     }
 
-    createEvent(event: { event?: Event; groupId?: string; deleteTemporaryEvent?: boolean }) {
+    createEvent(event: { event?: GanttItem; groupId?: string; deleteTemporaryEvent?: boolean }) {
         let item: GanttItem;
         if (event.event?.meta?.temporaryEvent) {
             const alreadyStartedDraggedEvent = this.items.find((item) => item.id === event.event.id);
             if (alreadyStartedDraggedEvent) {
-                alreadyStartedDraggedEvent.end = event.event.endTime.getTime();
+                alreadyStartedDraggedEvent.end = event.event.end;
                 this.items = [...this.items];
             } else {
                 const group = this.groups.find((group) => group.id === event.groupId);
                 item = event.event;
-                item.start = event.event.startTime.getTime();
+                item.start = event.event.start;
                 item.group_id = group.id;
                 item.color = TEMPORARY_ITEM_COLOR;
                 this.items = [item, ...this.items];
@@ -871,6 +853,17 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
         }
     }
 
+    modifyEvent(event: GanttItem) {
+        const modifiedEventIndex = this.items.findIndex((item) => item.id === event.id);
+        if (modifiedEventIndex > -1) {
+            console.log(this.items[modifiedEventIndex]);
+            this.items[modifiedEventIndex] = Object.assign((this.items[modifiedEventIndex], event));
+            console.log(this.items[modifiedEventIndex]);
+            // this.items = [...this.items];
+            console.log(this.items);
+        }
+    }
+
     // Delete temporary event on modal close
     deleteTemporaryEvent() {
         const index = this.items.findIndex((item) => item.meta.temporaryEvent === true);
@@ -882,7 +875,6 @@ export class AppGanttExampleComponent implements OnInit, AfterViewInit {
 
     openEchartModal(chart: EChartsOption) {
         this.isChartClicked = true;
-        this.hoveredEChart = chart;
         this.modalService.openEchart(chart);
     }
 }

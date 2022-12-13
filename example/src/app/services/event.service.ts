@@ -4,9 +4,8 @@
 
 import { Injectable } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { addDays } from 'date-fns';
 import { GanttGroup, GanttItem } from 'ngx-gantt';
-import { Event, EventType, State } from '../interfaces/event.interface';
+import { EventType, State } from '../interfaces/event.interface';
 
 export const productionLine1EventType: EventType = {
     timestamp: new Date(),
@@ -55,7 +54,7 @@ export class EventService {
         return eventTypes;
     }
 
-    createEvent(event: Event, groups: GanttGroup[]) {
+    createEvent(event: GanttItem, groups: GanttGroup[]) {
         let item: GanttItem = event;
         item.id = this.generateRandomNumber().toString();
         const group = groups.find((group) => group.title === event.eventTypeName);
@@ -68,14 +67,14 @@ export class EventService {
         return item;
     }
 
-    createEventFromDrag(start: Date): Event {
+    createEventFromDrag(start: Date): GanttItem {
         return {
             timestamp: new Date(),
             id: this.generateRandomNumber().toString(),
             name: '',
             eventTypeName: '',
             eventTypeVersion: 0,
-            startTime: start,
+            start: start.getTime(),
             state: State.CREATED,
             meta: {
                 temporaryEvent: true

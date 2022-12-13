@@ -25,9 +25,6 @@ export class GanttMainComponent implements OnInit, OnChanges {
     @Input() rangeTemplate: TemplateRef<any>;
 
     @Input() dragCreationInProgress: boolean = false;
-    @Input() barClick: boolean = false;
-
-    @Output() _barClick = new EventEmitter<GanttBarClickEvent>();
 
     @Output() newEventClick = new EventEmitter<GanttMainClickEvent>();
 

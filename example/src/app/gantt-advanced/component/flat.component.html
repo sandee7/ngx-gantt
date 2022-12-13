@@ -22,7 +22,7 @@
             <ng-container *ngFor="let items of group.mergedItems">
               <div class="gantt-flat-items" [style.height.px]="styles.lineHeight">
                 <ng-container *ngFor="let item of items; trackBy: trackBy">
-                  <ngx-gantt-bar [item]="item" [template]="barTemplate" (barClick)="barClick.emit($event)"></ngx-gantt-bar>
+                  <ngx-gantt-bar [item]="item" [template]="barTemplate"></ngx-gantt-bar>
                 </ng-container>
               </div>
             </ng-container>

@@ -24,14 +24,14 @@ import {
     TemplateRef,
     ViewChild
 } from '@angular/core';
-import { Event } from 'example/src/app/interfaces/event.interface';
+import { Event, State } from 'example/src/app/interfaces/event.interface';
 import { EventService } from 'example/src/app/services/event.service';
 import { GanttService } from 'example/src/app/services/gantt.service';
 import { ModalService } from 'example/src/app/services/modal.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { from, fromEvent, Observable, Subject } from 'rxjs';
 import { finalize, startWith, take, takeUntil } from 'rxjs/operators';
-import { GanttItem, GanttItemInternal, GanttLineClickEvent, GanttMainClickEvent, GanttSelectedEvent } from './class';
+import { GanttBarClickEvent, GanttItem, GanttItemInternal, GanttLineClickEvent, GanttMainClickEvent, GanttSelectedEvent } from './class';
 import { defaultColumnWidth } from './components/table/gantt-table.component';
 import { GANTT_ABSTRACT_TOKEN } from './gantt-abstract';
 import { GanttUpper, GANTT_UPPER_TOKEN } from './gantt-upper';
@@ -69,11 +69,15 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
 
     @Input() isChartClicked: boolean;
 
+    @Input() clickedBar: GanttItem;
+
     @Output() lineClick = new EventEmitter<GanttLineClickEvent>();
 
     @Output() selectedChange = new EventEmitter<GanttSelectedEvent>();
 
-    @Output() newEventCreation = new EventEmitter<{ event?: Event; groupId?: string; deleteTemporaryEvent?: boolean }>();
+    @Output() newEventCreation = new EventEmitter<{ event?: GanttItem; groupId?: string; deleteTemporaryEvent?: boolean }>();
+
+    @Output() eventModification = new EventEmitter<Event>();
 
     @ContentChild(NgxGanttTableComponent) table: NgxGanttTableComponent;
 
@@ -134,6 +138,9 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
                 this.modifyViewZoom();
                 this.computeRefs();
             }
+            if (changes.clickedBar) {
+                this.modifyEvent();
+            }
         }
     }
 
@@ -190,7 +197,7 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
         this.ganttRoot.scrollToDate(date);
     }
 
-    startDragToCreate(event: GanttMainClickEvent) {
+    createNewEvent(event: GanttMainClickEvent) {
         // If it was a left click
         if (event.event.button === 0) {
             const clickedX = event.event.offsetX;
@@ -206,7 +213,7 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
                 .subscribe((mouseMoveEvent: MouseEvent) => {
                     const movedX = mouseMoveEvent.offsetX;
                     const movedEvent = this.view.getDateByXPoint(movedX);
-                    dragToSelectEvent.endTime = movedEvent.value;
+                    dragToSelectEvent.end = movedEvent.value.getTime();
                     this.newEventCreation.emit({ event: dragToSelectEvent, groupId: event.group.id });
                     if (!scrolled) {
                         this.scrollToTemporaryEvent();
@@ -215,7 +222,8 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
                 })
                 .add(() => {
                     this.modalService.createEventModal(
-                        dragToSelectEvent.startTime,
+                        new Date(dragToSelectEvent.start),
+                        State.CREATED,
                         (result) => {
                             this.newEventCreation.emit({ event: result, deleteTemporaryEvent: true });
                         },
@@ -223,7 +231,7 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
                             this.newEventCreation.emit({ deleteTemporaryEvent: true });
                             console.log('Modal closed.');
                         },
-                        dragToSelectEvent.endTime,
+                        new Date(dragToSelectEvent.end),
                         event.group.title
                     );
                 });
@@ -238,6 +246,19 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
             const elementTop = Math.floor(rect.top + scrollContainer.scrollTop - 150 - scrollContainer.clientHeight / 8);
             scrollContainer.scrollTo({ top: elementTop });
         }
+    }
+
+    modifyEvent() {
+        this.modalService.modifyEventModal(
+            State.MODIFIED,
+            this.clickedBar,
+            (result) => {
+                this.eventModification.emit(result);
+            },
+            () => {
+                console.log('Modal closed.');
+            }
+        );
     }
 
     modifyViewZoom() {

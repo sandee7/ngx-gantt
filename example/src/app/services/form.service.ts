@@ -52,12 +52,6 @@ export class FormService {
                     }
                 ],
                 description: ['', { validators: Validators.compose([Validators.maxLength(150)]) }],
-                action: [
-                    '',
-                    {
-                        validators: Validators.compose([Validators.required])
-                    }
-                ],
                 eventTypeName: [
                     '',
                     {
@@ -65,6 +59,12 @@ export class FormService {
                     }
                 ],
                 eventTypeVersion: [
+                    '',
+                    {
+                        validators: Validators.compose([Validators.required])
+                    }
+                ],
+                action: [
                     '',
                     {
                         validators: Validators.compose([Validators.required])
@@ -99,13 +99,12 @@ export class FormService {
                     {
                         validators: Validators.compose([Validators.required])
                     }
-                ]
-                // relations: [
-                //     '',
-                //     {
-                //         validators: Validators.compose([Validators.required])
-                //     }
-                // ]
+                ],
+                relations: ['', {}],
+                options: ['', {}],
+                // meta: { temporaryEvent: ['', {}]},
+                group_id: ['', {}],
+                color: ['', {}]
             },
             { validators: [], updateOn: 'change' }
         );

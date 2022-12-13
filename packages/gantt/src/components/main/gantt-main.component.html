@@ -43,7 +43,6 @@
             *ngIf="item.type | isGanttBarItem"
             [item]="item"
             [template]="barTemplate"
-            (barClick)="_barClick.emit($event)"
             (mousedown)="$event.stopPropagation()"
           ></gantt-bar>
           <gantt-baseline
