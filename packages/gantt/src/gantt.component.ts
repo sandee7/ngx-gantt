@@ -24,7 +24,7 @@ import {
     TemplateRef,
     ViewChild
 } from '@angular/core';
-import { Event, State } from 'example/src/app/interfaces/event.interface';
+import { State } from 'example/src/app/interfaces/event.interface';
 import { EventService } from 'example/src/app/services/event.service';
 import { GanttService } from 'example/src/app/services/gantt.service';
 import { ModalService } from 'example/src/app/services/modal.service';
@@ -77,7 +77,7 @@ export class NgxGanttComponent extends GanttUpper implements OnInit, AfterViewIn
 
     @Output() newEventCreation = new EventEmitter<{ event?: GanttItem; groupId?: string; deleteTemporaryEvent?: boolean }>();
 
-    @Output() eventModification = new EventEmitter<Event>();
+    @Output() eventModification = new EventEmitter<GanttItem>();
 
     @ContentChild(NgxGanttTableComponent) table: NgxGanttTableComponent;
 
