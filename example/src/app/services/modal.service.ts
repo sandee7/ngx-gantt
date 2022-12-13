@@ -7,7 +7,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 import { EChartsOption } from 'echarts';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { GanttItem } from 'ngx-gantt';
-import { Event, State } from '../interfaces/event.interface';
+import { State } from '../interfaces/event.interface';
 import { CreateEventComponent } from '../modals/create-event/create-event-modal.component';
 import { EchartComponent } from '../modals/echart/echart-modal.component';
 
@@ -19,7 +19,7 @@ export class ModalService {
     createEventModal(
         start: Date,
         state: State,
-        successCallback: (event: Event) => void,
+        successCallback: (event: GanttItem) => void,
         cancelCallback: () => void,
         end?: Date,
         eventTypeName?: string
@@ -40,7 +40,7 @@ export class ModalService {
         return modal;
     }
 
-    modifyEventModal(state: State, event: GanttItem, successCallback: (event: Event) => void, cancelCallback: () => void) {
+    modifyEventModal(state: State, event: GanttItem, successCallback: (event: GanttItem) => void, cancelCallback: () => void) {
         const modal: any = this.nzModal.create({
             nzTitle: 'Modify event',
             nzContent: CreateEventComponent,

@@ -104,7 +104,9 @@ export class FormService {
                 options: ['', {}],
                 // meta: { temporaryEvent: ['', {}]},
                 group_id: ['', {}],
-                color: ['', {}]
+                color: ['', {}],
+                draggable: [true, {}],
+                expandable: [true, {}]
             },
             { validators: [], updateOn: 'change' }
         );

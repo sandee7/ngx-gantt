@@ -26,9 +26,9 @@ export interface GanttItem<T = unknown> {
     timestamp?: Date;
     name: string;
     description?: string;
-    action?: string;
     eventTypeName: string;
     eventTypeVersion: number;
+    action?: string;
     start?: number;
     end?: number;
     state: State;

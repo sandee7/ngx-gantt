@@ -156,7 +156,9 @@ export class CreateEventComponent implements OnInit {
                 relations: this.eventForm.get('relations').value,
                 options: this.eventForm.get('options').value,
                 group_id: this.eventForm.get('group_id').value,
-                color: this.eventForm.get('color').value
+                color: this.eventForm.get('color').value,
+                draggable: this.eventForm.get('draggable').value,
+                expandable: this.eventForm.get('expandable').value
             };
             this.message.success(`${this.state === State.CREATED ? 'Yaay, new event created!' : 'Yaay, an event modified!'}`);
             return Promise.resolve().then(() => this.modal.triggerOk());
